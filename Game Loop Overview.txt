@@ -1,0 +1,7 @@
+Rock, Paper, Scissors + Uno + Hangman?
+
+- Base game of uno
+- Turn is decided on either rock, paper, scissors or a vairent for 3+ players
+- On your turn you can play a power play (3 chances) to 'guess' if a card is in the player's deck
+	- i.e guess red, 5
+		- other player either anwsers higher/lower or warmer/colder (if for example they have a red card of a different number or a 5 card of a different colour (cold/warm in based on colour hues).
