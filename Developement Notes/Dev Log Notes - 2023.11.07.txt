@@ -1,0 +1,22 @@
+First thing was to figure out the structure of the player's hand:
+- thought about dictionary since I found it to be an easy way to manage related data of different types during my computational methods assessment
+	- but felt that this was a missue since there wasn't really a need for any sory of key system
+
+- decided to use a struct since generally these type of important game elements are generally coded as classes
+
+
+chose to enumarate the card colours instead of using string descriptors for more flexibility with the struct data type (i.e allowing switch case comparisions with the need for extra code)
+
+1st implimentation of input validation came from making sure that the game would only except an appropriate name (no slurs, sensitive/political topics/keywords, curse words or loaded words in general.
+	- list of words used were provided by various links of documents/textfiles full of bannable words designed for automod bots
+		- https://docs.google.com/document/d/1zEZYFTFNZE75uEA7cR149ab5yO1UbgATrJh33-PB4ZY/edit
+
+Tested code to see if name was in the ban list
+	- plan to extend this code to check if the name FEATURES a banned word instead of directly resembling it
+	- code also lets some unchecked/minor sensored words through (basically those not in the ban list)
+		- decided to let this slide as the main point of the assignment is the game, so fussing about exact number of banned words the validation catches would be a poor use of time
+
+To protect the integrity of the class attribute, chose to use a temp variable to temporarly store the player name incase it needed to be repeatedly changed during validation
+
+Kept running into an error where the capitalization would return an insanely long string
+	- tried temp variables incase the logic error

@@ -1,0 +1,3 @@
+﻿  Rock-Paper-Uno.cpp
+C:\Users\a018073n\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(30): warning C4715: 'isBanned': not all control paths return a value
+  Rock-Paper-Uno.vcxproj -> C:\Users\a018073n\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\x64\Debug\Rock-Paper-Uno.exe
