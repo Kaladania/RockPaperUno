@@ -5,13 +5,8 @@
 #define FOUNDIN(dataToSearch, itemToFind) (dataToSearch.find(itemToFind) != std::string::npos) //shorthand to make writing code to find existing items easier
 #define LENGTHOF(arrayToCheck) sizeof(arrayToCheck) / sizeof(arrayToCheck[0]) //shorthand to quickly determine the length of an array
 
-int menuInputValidation(int optionMax) //validates a user's input
+int menuInputValidation(int optionChosen, int optionMax) //validates a user's input
 {
-    int number = 0;
-    int optionChosen = 0;
-
-    std::cout << "Please enter the option you wish to choose: ";
-    std::cin >> optionChosen;
 
     //runs until it gains a valid input
     //checks to see if the input is out of range or not an int

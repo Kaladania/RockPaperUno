@@ -1,3 +1,9 @@
 ﻿  Rock-Paper-Uno.cpp
-C:\Users\a018073n\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(30): warning C4715: 'isBanned': not all control paths return a value
-  Rock-Paper-Uno.vcxproj -> C:\Users\a018073n\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\x64\Debug\Rock-Paper-Uno.exe
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(167,16): warning C4477: 'printf' : format string '%i' requires an argument of type 'int', but variadic argument 1 has type 'unsigned __int64'
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(167,16): message : consider using '%zi' in the format string
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(240,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(282,63): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(242,18): warning C4101: 'participantCurrentlyPlaying': unreferenced local variable
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(31): warning C4715: 'isBanned': not all control paths return a value
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(45): warning C4715: 'indexToColour': not all control paths return a value
+  Rock-Paper-Uno.vcxproj -> C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\x64\Debug\Rock-Paper-Uno.exe

@@ -1,0 +1,19 @@
+realised a more appropriate reason while dictionary couldn't be used is that keys cannot be duplicates. As a result, it would be impractical to use it as a data set for the player's hand considering decks of uno cards have the possibility of creating duplicates.
+
+in future want to find more elegant way of coding the various cards used for the player and CPU hands (instead of just declaring a massive amount of variables)
+
+because of this decided to just go with a normal 2d array, having the row consist of two collumbs. One with the colour, and one with the number.
+
+However, immediatly began running into problems using a 2D with functions. Thanks to how C++ interprets passing arrays through functions, 2D arrays would be both impractical and tedious to use due to the amount of work arounds need to create a functioning code (destroying readability).
+
+As a result, decided to look at vectors. Was first hestitant as vectors can lead to wasted memory if the flexibility is not utilized. However, realised that uno isn't a game with a fixed size of card deck. Therefore, while also being more usable, it makes the most sense of all the type of collection structures when looking to create the deck.
+
+The rest of the day was spent slowly coding the gameplay functions. I gradually made my way down the gameplay portion of the flowchart. Coding annoucements and deck prieviews. When testing the code to randomly generate cards, found that the same types of cards where being randomly generated each run. This would ruin replayability as the code utilising the same seed each session would essientially make it so that most (if not all) games play out exactly the same way. Fixed this by using (srand) to generate a completely new seed every time the code runs, ensuring that the cards are different each play through.
+
+Added inheritence to help section of bits of the code in order to prevent things like the CPU instance reciving access to redundant methods (such as choosing a card via input or entering a name). Also helped to make the functinos more targeted as I could leave general use functions in the 'participants' class while things like 'handsetup' can have all the player generate cards in the player child, and the cpu generated cards in the cpu pile.
+
+Also began implimenting my old input validation code to help sanitise inputs and ensure that they dont break the code (while speeding up development by not needing to recode multiple validation loops.
+
+Also began to set up variables in preporation for the main gameplay (i.e a pointer to point to the participant current having their turn, and a discard variable that holds the most recently discarded card.
+
+That being said, once I figure out the issues with vector.erase not allowing me to add an argument into tell it the index of what I want it to erase, I want to look into replacing this with an array to store the last 5-10 cards (when powerups are activated. for now default set to zero because they are a stretch goal). (that being said, want to ask for feedback to see if it would be better to just randomly generate these cards instead of creating a long list of cards that may not see the light of day again.
