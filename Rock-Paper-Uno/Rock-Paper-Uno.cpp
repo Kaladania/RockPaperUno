@@ -44,12 +44,21 @@ std::string indexToColour(const int index) { //converts the index to colour
     }
 }
 
+enum cardColour {
+    Red,
+    Yellow,
+    Green,
+    Blue,
+};
+
+
 struct UnoCard {
     int number = 0; //stores card number
     int colourIndex = 0; //stores card colour
     int powerUpIndex = 0; //stores card power up
 }playerCard1, playerCard2, playerCard3, playerCard4, playerCard5, playerCard6, playerCard7, playerCard8, 
 cpuCard1, cpuCard2, cpuCard3, cpuCard4, cpuCard5, cpuCard6, cpuCard7, cpuCard8, startingCard;
+
 
 class participant { //base class for player and cpu
 
