@@ -1,0 +1,10 @@
+ask if attriubtes should always be private due to encapsulation
+- creating a text based card game where the player hand is always being updated
+	- since its part of the player class, is private by default
+	- however it means updating it has to return a copy of the card to the main code in order to update it
+
+ask about enums and how to use them in uno/a colour picking and comparison game
+
+having trouble updating a vector from a base class method
+- the sub class has the updated hand vector, so can't create a class for participant as get "vector out of range" due to hand having no cards
+	- don't know how should set up the class in a way that can have the base operate functions like this

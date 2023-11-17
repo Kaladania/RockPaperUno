@@ -1,0 +1,9 @@
+the class lecture made me realised that the error I'd made with my class setup. This includes setting attributes in the base class as private, which lead to errors creating template codes as it meant that attributes would have to be re-initialised in the respective subclasses, leaving the templates with nothing to reffer to.
+
+
+The for loop worked, allowing me to discard the large blocks of setup functions, and card variables while also allowing me to move the loop into the base class; reducing the duplicated code
+
+Started running into the problem where the large amount of text made it hard to see/pick out important information (such as what the current discard card is)
+- decided to fix this by utilising the api. referenced experimentations in earlier lessons to add colour to the letters in order to help differentiate information
+
+To further the immersion and make the game more interactive to play, added delays to the text in order to incorporate animations that make the game feel more dynamic.
