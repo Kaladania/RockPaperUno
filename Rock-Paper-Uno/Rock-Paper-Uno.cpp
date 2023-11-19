@@ -1,14 +1,13 @@
-// Rock-Paper-Uno.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include <Windows.h>
 #include <fstream>
 #include <map>
 #include <algorithm>
 #include <vector>
 #include "SetupFunctions.h"
 
-bool isBanned(std::string playerName) { //checks if player's name is appropriate
+//checks if player's name is appropriate
+bool isBanned(std::string playerName) {
 
     std::string bannedWord = ""; //current banned word to check
 
@@ -30,40 +29,71 @@ bool isBanned(std::string playerName) { //checks if player's name is appropriate
     }
 }
 
-std::string indexToColour(const int index) { //converts the index to colour
+//converts the index to colour
+std::string indexToColour(const int index) { 
     switch (index) {
 
     case 0:
-        return "red";
+        return "Red";
     case 1:
-        return "yellow";
+        return "Yellow";
     case 2:
-        return "green";
+        return "Green";
     case 3:
-        return "blue";
+        return "Blue";
     }
 }
 
-enum cardColour {
-    Red,
-    Yellow,
-    Green,
-    Blue,
-};
+//prints the cards in colour
+void printColour(const int colourIndex) {
+
+    switch (colourIndex) {
+    case 0:
+        //red
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+        break;
+
+    case 1:
+        //yellow
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+        break;
+
+    case 2:
+        //green
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+        break;
+
+    case 3:
+        //blue
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
+        break;
+
+    case -1:
+        //white
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+        break;
+    };
+}
+
+//enum cardColour {
+//    Red,
+//    Yellow,
+//    Green,
+//    Blue,
+//};
 
 
 struct UnoCard {
     int number = 0; //stores card number
     int colourIndex = 0; //stores card colour
     int powerUpIndex = 0; //stores card power up
-}playerCard1, playerCard2, playerCard3, playerCard4, playerCard5, playerCard6, playerCard7, playerCard8, 
-cpuCard1, cpuCard2, cpuCard3, cpuCard4, cpuCard5, cpuCard6, cpuCard7, cpuCard8, startingCard;
+}newCard, startingCard;
 
 
 class participant { //base class for player and cpu
 
-private:
-    std::vector<UnoCard> hand; //player hand
+protected:
+    std::vector<UnoCard> hand; //stores participant's hand
     bool isPlayersTurn = false; //stores if its the current instance's turn
 
 public:
@@ -87,39 +117,71 @@ public:
         }
     }*/
 
-    void generateCard(int& cardColour, int& cardNumber) { //randomly generates a card
+    //randomly generates a card
+    void generateCard(int& cardColour, int& cardNumber) { 
 
         cardColour = rand() % 4;
         cardNumber = rand() % 8;
     }
 
-    std::vector<UnoCard> placeCard(const int& cardIndex, const UnoCard& discardCard){
 
-        UnoCard chosenCard = hand[cardIndex];
+    //sets up a new hand of 8 cards
+    std::vector<UnoCard> handSetup(participant& activeParticipant) {
+        for (int i = 0; i < 8; i++) {
 
-        if (chosenCard.colourIndex == discardCard.colourIndex || chosenCard.number == discardCard.number) {
-
-            //hand.empty(hand.begin());
+            activeParticipant.generateCard(newCard.colourIndex, newCard.number);
+            hand.push_back(newCard);
         }
+
+        return hand;
+    }
+
+    //discards choosen card from participant's hand
+    std::vector<UnoCard> placeCard(int& cardIndex, UnoCard& discardCard, std::vector<int>::iterator& iterator){
+
+        UnoCard chosenCard; //card to discad
+
+        
+        do {
+            chosenCard = hand[cardIndex];
+
+            if (chosenCard.colourIndex == discardCard.colourIndex || chosenCard.number == discardCard.number) {
+
+                hand.erase(hand.begin() + cardIndex); //removes chosen card from participant's hand
+                break;
+            }
+
+            printf("\nThe card you chose is not the same colour or type as the card at the top of the discard pile."
+                "\nPlease choose another card:\n> ");
+
+            std::cin >> cardIndex;
+            cardIndex = menuInputValidation(cardIndex, hand.size());
+            cardIndex -= 1;
+        } while (chosenCard.colourIndex != discardCard.colourIndex || chosenCard.number != discardCard.number); //runs until player discards a valid card
+
+        std::cout << "\nThe card ";
+        printColour(chosenCard.colourIndex);
+        std::cout << indexToColour(chosenCard.colourIndex);
+        printColour(-1);
+        std::cout << " " << chosenCard.number << " was discarded\n";
 
         return hand;
 
     }
 
-    void addCard() {};
+    void drawCard() {};
 };
 
 class Player : public participant { //dedicated player class
 
 private:
     std::string name; //player name
-    std::vector<UnoCard> hand;
 
 public:
     std::string setPlayerName() { //sets player name (based on user input)
 
-        bool nameIsInappropriate = false;
-        std::string uncheckedName;
+        bool nameIsInappropriate = false; //stores if name was found in banList
+        std::string uncheckedName; //holds the player's name input
 
         std::cout << "Enter Name: ";
         std::cin >> uncheckedName;
@@ -148,7 +210,8 @@ public:
 
     }
 
-    std::vector<UnoCard> handSetup(Player& player) { //'draws' 8 random cards
+    //'draws' 8 random cards
+    /*std::vector<UnoCard> handSetup(Player& player) {
 
         player.generateCard(playerCard1.colourIndex, playerCard1.number);
         player.generateCard(playerCard2.colourIndex, playerCard2.number);
@@ -168,59 +231,75 @@ public:
         hand.push_back(playerCard7);
         hand.push_back(playerCard8);
 
-        return hand;
-    }
-
-    void showHand() { //reveals all the cards currently in the players hand
-
-        printf("You currently have %i cards in your hand. They are the following:\n", hand.size());
-
         for (int i = 0; i < 8; i++) {
 
-            std::cout << "\n" << i+1 << ". " << indexToColour(hand[i].colourIndex) << " " << hand[i].number << ",";
+            player.generateCard(newCard.colourIndex, newCard.number);
+            hand.push_back(newCard);
+        }
 
+        return hand;
+    };*/
+
+
+    //reveals all the cards currently in the players hand
+    void showHand() { 
+
+
+        printf("\nYou currently have %i cards in your hand. They are the following:\n", hand.size());
+
+        for (int i = 0; i < hand.size(); i++) {
+
+            std::cout << "\n" << i + 1 << ". ";
+            printColour(hand[i].colourIndex);
+            std::cout << indexToColour(hand[i].colourIndex);
+            printColour(-1);
+            std::cout << " " << hand[i].number << ",";
+
+            Sleep(200);
+            
         }
     }
 
-    int chosenAction() {//gets the player's chosen action and validates it
-
-        int action = 0;
-
-        printf("\nWhat would you like to do?\n1.Place a Card\t2.Pick up a Card\n");
-        std::cin >> action;
-
-        action = menuInputValidation(action, 2);
-
-        return action;
-    }
+    //int chosenAction() {//gets the player's chosen action and validates it
+    //    int action = 0;
+    //    printf("\nWhat would you like to do?\n1.Place a Card\t2.Pick up a Card\n");
+    //    std::cin >> action;
+    //    action = menuInputValidation(action, 2);
+    //    return action;
+    //}
 };
 
 class CPU : public participant {//dedicated cpu class
 
-private:
-    std::vector<UnoCard> hand; //CPU hand (8 cards)
-
 public:
 
-    void handSetup(CPU& cpu) { //'draws' 8 random cards
-        cpu.generateCard(cpuCard1.colourIndex, cpuCard1.number);
-        cpu.generateCard(cpuCard2.colourIndex, cpuCard2.number);
-        cpu.generateCard(cpuCard3.colourIndex, cpuCard3.number);
-        cpu.generateCard(cpuCard4.colourIndex, cpuCard4.number);
-        cpu.generateCard(cpuCard5.colourIndex, cpuCard5.number);
-        cpu.generateCard(cpuCard6.colourIndex, cpuCard6.number);
-        cpu.generateCard(cpuCard7.colourIndex, cpuCard7.number);
-        cpu.generateCard(cpuCard8.colourIndex, cpuCard8.number);
+    //std::vector<UnoCard> handSetup(CPU& cpu) { //'draws' 8 random cards
+    //    /*cpu.generateCard(cpuCard1.colourIndex, cpuCard1.number);
+    //    cpu.generateCard(cpuCard2.colourIndex, cpuCard2.number);
+    //    cpu.generateCard(cpuCard3.colourIndex, cpuCard3.number);
+    //    cpu.generateCard(cpuCard4.colourIndex, cpuCard4.number);
+    //    cpu.generateCard(cpuCard5.colourIndex, cpuCard5.number);
+    //    cpu.generateCard(cpuCard6.colourIndex, cpuCard6.number);
+    //    cpu.generateCard(cpuCard7.colourIndex, cpuCard7.number);
+    //    cpu.generateCard(cpuCard8.colourIndex, cpuCard8.number);
 
-        hand.push_back(cpuCard1);
-        hand.push_back(cpuCard2);
-        hand.push_back(cpuCard3);
-        hand.push_back(cpuCard4);
-        hand.push_back(cpuCard5);
-        hand.push_back(cpuCard6);
-        hand.push_back(cpuCard7);
-        hand.push_back(cpuCard8);
-    }
+    //    hand.push_back(cpuCard1);
+    //    hand.push_back(cpuCard2);
+    //    hand.push_back(cpuCard3);
+    //    hand.push_back(cpuCard4);
+    //    hand.push_back(cpuCard5);
+    //    hand.push_back(cpuCard6);
+    //    hand.push_back(cpuCard7);
+    //    hand.push_back(cpuCard8);*/
+
+    //    /*for (int i = 0; i < 8; i++) {
+
+    //        cpu.generateCard(newCard.colourIndex, newCard.number);
+    //        hand.push_back(newCard);
+    //    }
+
+    //    return hand;*/
+    //}
 };
 
 /*void handSetup(Player& player, Player& cpu) {
@@ -246,14 +325,18 @@ public:
 int main()
 {
     //general setup
+
     srand(time(NULL));
+    std::vector<int>::iterator iterator; //allows for vector iteration
+
     UnoCard discardCard; //stores the current card to be compared to
     participant* participantCurrentlyPlaying; //points to the participant currently playing
 
     
     //player information setup
-    std::string playerName = "";
-    std::vector<UnoCard> playerHand;
+
+    std::string playerName = ""; //stores player name
+    std::vector<UnoCard> playerHand; //stores a copy of the player's hand
     int playerAction = 0;
     int cardToDiscard = 0;
 
@@ -263,36 +346,62 @@ int main()
 
 
     //game loop setup
+
     int totalRounds = 0;
 
     cpu.generateCard(startingCard.colourIndex, startingCard.number);
     discardCard = startingCard;
+    
 
+    //game loop
     while (true) {
+
         playerName = player.setPlayerName();
         std::cout << "Hello! " << playerName << "\n";
 
+        Sleep(500);
+
         playerHand = player.handSetup(player);
 
-        std::cout << "Round: " << totalRounds <<
-            "\nThe card currently at the top of the discrard pile is a " << indexToColour(discardCard.colourIndex) << " " << discardCard.number << "\n";
+        Sleep(600);
+
+        std::cout << "\nRound: " << totalRounds;
+
+        Sleep(500);
+
+        //prints out the discard card
+        std::cout << "\n\nThe card currently at the top of the discrard pile is a ";
+        printColour(discardCard.colourIndex);
+        std::cout << indexToColour(discardCard.colourIndex);
+        printColour(-1); 
+        std::cout << " " << discardCard.number << "\n";
+        
+        Sleep(500);
 
         player.showHand();
 
-        playerAction = player.chosenAction();
+        //playerAction = player.chosenAction();
+
+        printf("\n\nWhat would you like to do?\n1. Place a card\t2. Pick up a card\n> ");
+        std::cin >> playerAction;
+
+        playerAction = menuInputValidation(playerAction, 2);
+
 
         switch (playerAction)
         {
         case 1:
 
-            printf("\nEnter the index number of the card you wish to discard: ");
+            printf("\nEnter the index number of the card you wish to discard\n> ");
+            
             std::cin >> cardToDiscard;
-            cardToDiscard-= 1; //translates choice to maintain code accuracy
             menuInputValidation(cardToDiscard, playerHand.size());
-            playerHand = player.placeCard(cardToDiscard-1, discardCard);
+            cardToDiscard -= 1; //translates choice to maintain code accuracy
+            
+            playerHand = player.placeCard(cardToDiscard, discardCard, iterator);
             break;
         case 2:
-            player.addCard();
+            player.drawCard();
             break;
         }
 
