@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <vector>
 #define FOUNDIN(dataToSearch, itemToFind) (dataToSearch.find(itemToFind) != std::string::npos) //shorthand to make writing code to find existing items easier
-#define FOUNDINPOINTER(dataToSearch, itemToFind) ((std::find(dataToSearch, dataToSearch+(LENGTHOF(dataToSearch)), itemToFind)) != std::end(validCommands)) //exclusive FOUNDIN definition for pointers
+//#define FOUNDINCOLLECTION(dataToSearch, itemToFind, collectionLength) ((std::find(dataToSearch, dataToSearch+collectionLength, itemToFind)) != std::end(validCommands)) //exclusive FOUNDIN definition for pointers
 #define LENGTHOF(arrayToCheck) sizeof(arrayToCheck) / sizeof(arrayToCheck[0]) //shorthand to quickly determine the length of an array
 
 //validates menu input
@@ -108,7 +108,42 @@ struct UnoCard {
     int number = 0; //stores card number
     int colourIndex = 0; //stores card colour
     int powerUpIndex = 0; //stores card power up
+
+    ////overides = to allow for item assignment
+    //UnoCard& operator = (UnoCard& rhs) {
+    //    if (this != &rhs) { //makes sure the item isn't reassigned to itself
+
+    //        //replaces the current data in memory
+    //        number = rhs.number;
+    //        colourIndex = rhs.colourIndex;
+    //        powerUpIndex = rhs.powerUpIndex;
+    //    }
+    //    return *this;
+    //}
+
 };
+
+//overides == to allow for UnoCard struct comparisson
+bool operator== (const UnoCard& lhs, const UnoCard& rhs) {
+    return (lhs.colourIndex == rhs.colourIndex
+        && lhs.number == rhs.number
+        && lhs.powerUpIndex == rhs.powerUpIndex);
+}
+
+bool foundInVector(std::vector<UnoCard>& dataToSearch, const UnoCard itemToFind) {
+
+    std::vector<UnoCard>::iterator index;
+    index = std::find(dataToSearch.begin(), dataToSearch.end(), itemToFind);
+
+    if (index != dataToSearch.end()) { //if an index is found for an existing match
+        return true;
+    }
+    else {
+        return false;
+    }
+
+
+}
 
 
 class participant { //base class for player and cpu
@@ -161,27 +196,13 @@ public:
     }
 
     //discards choosen card from participant's hand
-    UnoCard placeCard(int& cardIndex, UnoCard& discardCard, std::vector<int>::iterator& iterator) {
+    UnoCard placeCard(int& cardIndex, UnoCard& discardCard) {
 
         UnoCard chosenCard; //card to discad
 
+        chosenCard = hand[cardIndex];
 
-        do {
-            chosenCard = hand[cardIndex];
-
-            if (chosenCard.colourIndex == discardCard.colourIndex || chosenCard.number == discardCard.number) {
-
-                hand.erase(hand.begin() + cardIndex); //removes chosen card from participant's hand
-                break;
-            }
-
-            printf("\nThe card you chose is not the same colour or type as the card at the top of the discard pile."
-                "\nPlease choose another card:\n> ");
-
-            std::cin >> cardIndex;
-            cardIndex = menuInputValidation(cardIndex, hand.size());
-            cardIndex -= 1;
-        } while (chosenCard.colourIndex != discardCard.colourIndex || chosenCard.number != discardCard.number); //runs until player discards a valid card
+        hand.erase(hand.begin() + cardIndex); //removes chosen card from participant's hand
 
         std::cout << "\nThe card ";
         printColour(chosenCard.colourIndex);
@@ -291,6 +312,39 @@ public:
         return hand;
     };*/
 
+    //discards choosen card from participant's hand
+    UnoCard placeCard(int& cardIndex, UnoCard& discardCard) {
+
+        UnoCard chosenCard; //card to discad
+
+
+        do {
+            chosenCard = hand[cardIndex];
+
+            if (chosenCard.colourIndex == discardCard.colourIndex || chosenCard.number == discardCard.number) {
+
+                hand.erase(hand.begin() + cardIndex); //removes chosen card from participant's hand
+                break;
+            }
+
+            printf("\nThe card you chose is not the same colour or type as the card at the top of the discard pile."
+                "\nPlease choose another card:\n> ");
+
+            std::cin >> cardIndex;
+            cardIndex = menuInputValidation(cardIndex, hand.size());
+            cardIndex -= 1;
+        } while (chosenCard.colourIndex != discardCard.colourIndex || chosenCard.number != discardCard.number); //runs until player discards a valid card
+
+        std::cout << "\nThe card ";
+        printColour(chosenCard.colourIndex);
+        std::cout << indexToColour(chosenCard.colourIndex);
+        printColour(-1);
+        std::cout << " " << chosenCard.number << " was discarded\n";
+
+        return chosenCard;
+
+    }
+
 
     //reveals all the cards currently in the players hand
     void showHand() {
@@ -323,6 +377,23 @@ public:
 class CPU : public participant {//dedicated cpu class
 
 public:
+
+    //decides if CPU should draw or place a card
+    int decideAction(UnoCard discardCard) {
+
+        for (int i = 0; i < hand.size(); i++) { //cpu looks to see if there is a card it can draw
+
+            //finds the first card that matches
+            if (hand[i].colourIndex == discardCard.colourIndex || hand[i].number == discardCard.number) {
+
+                return i;
+
+            }
+        }
+
+        return -1; //returns invalid index if no suitable card was found
+
+    }
 
     //std::vector<UnoCard> handSetup(CPU& cpu) { //'draws' 8 random cards
     //    /*cpu.generateCard(cpuCard1.colourIndex, cpuCard1.number);

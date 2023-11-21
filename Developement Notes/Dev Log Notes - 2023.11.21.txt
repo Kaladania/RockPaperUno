@@ -1,0 +1,24 @@
+solved the problem of needing access to the player hand member by re-evaluating code. Realised that the time I referenced player hand outside of the code was to get the current size of the hand. Therefore, created a method to get the current size - mitagting need for the "playerHand" mirror variable.
+
+coded cpu ai
+- simple decision for loop to check if theres a card on hand
+	- if there is, play the first card it finds
+	- if not, pick up a card
+
+- had to override UnoCard's == operator to allow for updating the discardCard 
+
+- had problems with the UNO switch cases not picking up hands with either 1 (UNO) or 0 (WINNER) cards
+	- realised its because the reference hand size doesn't update until the end of the round
+		- had to add update clauses for both draw and place
+			- want to find way to reduce redandancy
+				- tempted to create a struct holding player and cpu set up values
+
+
+Stretch Goals
+- Save file storing
+	- save data to return to game at later date
+	- highscore (shortest round victory)
+- player input validation incase they try to place a card despite not having a viable option
+
+- card stacking (playing more than one card if you can stack)
+	- desperately needed after a test game ran for 48 rounds

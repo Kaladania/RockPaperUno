@@ -36,10 +36,16 @@ int main()
     //player information setup
 
     std::string playerName = ""; //stores player name
-    //std::vector<UnoCard> playerHand; //stores a copy of the player's hand
     int playerAction = 0;
-    int cardToDiscard = 0;
+    int playerCardToDiscard = 0;
     int playerHandSize = 0;
+
+
+    //cpu information setup
+
+    int cpuAction = 0;
+    int cpuCardToDiscard = 0;
+    int cpuHandSize = 0;
 
 
     Player player;
@@ -48,7 +54,7 @@ int main()
 
     //game loop setup
 
-    int totalRounds = 0;
+    int totalRounds = 1;
 
     cpu.generateCard(startingCard.colourIndex, startingCard.number);
     discardCard = startingCard;
@@ -64,13 +70,16 @@ int main()
     player.handSetup(player);
     playerHandSize = player.updateHandSize();
 
+    cpu.handSetup(player);
+    cpuHandSize = cpu.updateHandSize();
+
     Sleep(600);    
 
     //game loop
     //runs until the player chooses to exit the game
     while (playerAction != 3) {
 
-        std::cout << "\nRound: " << totalRounds;
+        printf("\n- - - - - ROUND %i - - - - -\n", totalRounds);
 
         Sleep(500);
 
@@ -81,7 +90,7 @@ int main()
         printColour(-1); 
         std::cout << " " << discardCard.number << "\n";
         
-        Sleep(500);
+        Sleep(800);
 
         player.showHand();
 
@@ -99,13 +108,14 @@ int main()
 
             printf("\nEnter the index number of the card you wish to discard\n> ");
             
-            std::cin >> cardToDiscard;
-            menuInputValidation(cardToDiscard, playerHandSize);
-            cardToDiscard -= 1; //translates choice to maintain code accuracy
+            std::cin >> playerCardToDiscard;
+            menuInputValidation(playerCardToDiscard, playerHandSize);
+            playerCardToDiscard -= 1; //translates choice to maintain code accuracy
             
-            discardCard = player.placeCard(cardToDiscard, discardCard, iterator);
+            discardCard = player.placeCard(playerCardToDiscard, discardCard);
+            playerHandSize = player.updateHandSize();
 
-            switch (playerHandSize) //checks if player is about to/has one
+            switch (playerHandSize) //checks if player is about to/has won
             {
             case 1: //player has one card left
                 std::cout << "\n" << playerName << " has an UNO!\n";
@@ -123,6 +133,7 @@ int main()
         case 2: //draw a card
 
             player.drawCard();
+            playerHandSize = player.updateHandSize();
             break;
 
         case 3: //exit game
@@ -132,10 +143,91 @@ int main()
 
         }
 
+
+
         //cpu's turn
+        Sleep(200);
+
+        printf("\n - - CPU'S TURN - - \n");
+
+        Sleep(500);
+        printf("\n.");
+        Sleep(500);
+        printf(" .");
+        Sleep(500);
+        printf(" .\n");
+        Sleep(700);
+
+        cpuCardToDiscard = cpu.decideAction(discardCard);
+
+        switch (cpuCardToDiscard)
+        {
+        case -1:
+            cpu.drawCard();
+            cpuHandSize = cpu.updateHandSize();
+            break;
+
+        default:
+            discardCard = cpu.placeCard(cpuCardToDiscard, discardCard);
+            cpuHandSize = cpu.updateHandSize();
+
+            switch (cpuHandSize) //checks if CPU is about to/has won
+            {
+            case 1: //cpu has one card left
+                std::cout << "\n The CPU has an UNO!\n";
+                break;
+
+            case 0:
+                std::cout << "\nThe CPU has no cards left! IT WINS!!!\n";
+                playerAction = 3; //triggers exit clause
+                break;
+            }
+        }
+
+        printf("\n");
+        Sleep(900);
+
+        //switch (cpuAction)
+        //{
+        //case 1: //place a card
+
+        //    printf("\nEnter the index number of the card you wish to discard\n> ");
+
+        //    std::cin >> playerCardToDiscard;
+        //    menuInputValidation(playerCardToDiscard, playerHandSize);
+        //    playerCardToDiscard -= 1; //translates choice to maintain code accuracy
+
+        //    discardCard = player.placeCard(playerCardToDiscard, discardCard, iterator);
+
+        //    switch (playerHandSize) //checks if player is about to/has one
+        //    {
+        //    case 1: //player has one card left
+        //        std::cout << "\n" << playerName << " has an UNO!\n";
+        //        break;
+
+        //    case 0:
+        //        std::cout << "\n" << playerName << " has no cards left! THEY WIN!!!\n";
+        //        playerAction = 3; //triggers exit clause
+        //        break;
+        //    }
+
+
+        //    break;
+
+        //case 2: //draw a card
+
+        //    player.drawCard();
+        //    break;
+
+        //case 3: //exit game
+
+        //    printf("\nYou've choosen to end the game. Goodbye!\n");
+        //    break;
+
+        //}
+
 
         //updates tracker variables
         totalRounds++;
-        playerHandSize = player.updateHandSize();
     }
 }

@@ -1,8 +1,8 @@
 ﻿  Rock-Paper-Uno.cpp
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(182,65): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(215,25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(299,16): warning C4477: 'printf' : format string '%i' requires an argument of type 'int', but variadic argument 1 has type 'unsigned __int64'
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(299,16): message : consider using '%zi' in the format string
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(236,25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(334,65): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(353,16): warning C4477: 'printf' : format string '%i' requires an argument of type 'int', but variadic argument 1 has type 'unsigned __int64'
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(353,16): message : consider using '%zi' in the format string
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(27,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(33,18): warning C4101: 'participantCurrentlyPlaying': unreferenced local variable
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(66): warning C4715: 'indexToColour': not all control paths return a value
