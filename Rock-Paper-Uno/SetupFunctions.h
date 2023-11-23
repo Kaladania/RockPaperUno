@@ -7,9 +7,14 @@
 #include <map>
 #include <algorithm>
 #include <vector>
+
 #define FOUNDIN(dataToSearch, itemToFind) (dataToSearch.find(itemToFind) != std::string::npos) //shorthand to make writing code to find existing items easier
 //#define FOUNDINCOLLECTION(dataToSearch, itemToFind, collectionLength) ((std::find(dataToSearch, dataToSearch+collectionLength, itemToFind)) != std::end(validCommands)) //exclusive FOUNDIN definition for pointers
 #define LENGTHOF(arrayToCheck) sizeof(arrayToCheck) / sizeof(arrayToCheck[0]) //shorthand to quickly determine the length of an array
+
+
+// UTILITY SETUP //
+
 
 //validates menu input
 int menuInputValidation(int optionChosen, int optionMax) //validates a user's input
@@ -96,12 +101,19 @@ void printColour(const int colourIndex) {
     };
 }
 
+
+
+// wanted to enumarate card to increase readability
+// decided against it enums are not as flexible as ints (would require a lot of static casting)
 //enum cardColour {
 //    Red,
 //    Yellow,
 //    Green,
 //    Blue,
 //};
+
+
+// GAMEPLAY SETUP //
 
 
 struct UnoCard {
@@ -130,26 +142,10 @@ bool operator== (const UnoCard& lhs, const UnoCard& rhs) {
         && lhs.powerUpIndex == rhs.powerUpIndex);
 }
 
-bool foundInVector(std::vector<UnoCard>& dataToSearch, const UnoCard itemToFind) {
-
-    std::vector<UnoCard>::iterator index;
-    index = std::find(dataToSearch.begin(), dataToSearch.end(), itemToFind);
-
-    if (index != dataToSearch.end()) { //if an index is found for an existing match
-        return true;
-    }
-    else {
-        return false;
-    }
-
-
-}
-
-
-class participant { //base class for player and cpu
+class Participant { //base class for player and cpu
 
 protected:
-    std::vector<UnoCard> hand; //stores participant's hand
+    std::vector<UnoCard> hand; //stores Participant's hand
     bool isPlayersTurn = false; //stores if its the current instance's turn
 
 public:
@@ -182,7 +178,7 @@ public:
 
 
     //sets up a new hand of 8 cards
-    void handSetup(participant& activeParticipant) {
+    void handSetup(Participant& activeParticipant) {
 
         UnoCard newCard;
 
@@ -195,14 +191,14 @@ public:
         //return hand;
     }
 
-    //discards choosen card from participant's hand
+    //discards choosen card from Participant's hand
     UnoCard placeCard(int& cardIndex, UnoCard& discardCard) {
 
         UnoCard chosenCard; //card to discad
 
         chosenCard = hand[cardIndex];
 
-        hand.erase(hand.begin() + cardIndex); //removes chosen card from participant's hand
+        hand.erase(hand.begin() + cardIndex); //removes chosen card from Participant's hand
 
         std::cout << "\nThe card ";
         printColour(chosenCard.colourIndex);
@@ -219,7 +215,7 @@ public:
         UnoCard drawnCard; //card that has been drawn
         generateCard(drawnCard.colourIndex, drawnCard.number);
 
-        hand.push_back(drawnCard); //adds a new card to the participant's hand
+        hand.push_back(drawnCard); //adds a new card to the Participant's hand
         std::cout << "\nThe card ";
         printColour(drawnCard.colourIndex);
         std::cout << indexToColour(drawnCard.colourIndex);
@@ -237,7 +233,7 @@ public:
     }
 };
 
-class Player : public participant { //dedicated player class
+class Player : public Participant { //dedicated player class
 
 private:
     std::string name; //player name
@@ -282,6 +278,8 @@ public:
 
     }
 
+    // original hand setup function that manual creates 8 cards
+    // felt code was cumbersome so looked to streamline it
     //'draws' 8 random cards
     /*std::vector<UnoCard> handSetup(Player& player) {
 
@@ -312,7 +310,7 @@ public:
         return hand;
     };*/
 
-    //discards choosen card from participant's hand
+    //discards choosen card from Participant's hand
     UnoCard placeCard(int& cardIndex, UnoCard& discardCard) {
 
         UnoCard chosenCard; //card to discad
@@ -323,7 +321,7 @@ public:
 
             if (chosenCard.colourIndex == discardCard.colourIndex || chosenCard.number == discardCard.number) {
 
-                hand.erase(hand.begin() + cardIndex); //removes chosen card from participant's hand
+                hand.erase(hand.begin() + cardIndex); //removes chosen card from Participant's hand
                 break;
             }
 
@@ -374,7 +372,7 @@ public:
     //}
 };
 
-class CPU : public participant {//dedicated cpu class
+class CPU : public Participant {//dedicated cpu class
 
 public:
 
@@ -423,3 +421,137 @@ public:
     //    return hand;*/
     //}
 };
+
+
+// finds if element in vector (card in Participant hand)
+bool foundInVector(std::vector<UnoCard>& dataToSearch, const UnoCard itemToFind) {
+
+    std::vector<UnoCard>::iterator index;
+    index = std::find(dataToSearch.begin(), dataToSearch.end(), itemToFind);
+
+    if (index != dataToSearch.end()) { //if an index is found for an existing match
+        return true;
+    }
+    else {
+        return false;
+    }
+
+
+}
+
+std::string rockPaperScissors() {
+
+    int playerSign = 0; //stores player's choosen sign
+    int cpuSign = 0; //stores cpu's choosen sign
+
+    while (true) {
+
+        printf(" - - - BATTLE TO CLAIM YOUR TURN! - - - -");
+        printf("\n\nWhat would you like to do?\n1. Rock   2. Paper   3. Scissor\n> ");
+        std::cin >> playerSign;
+        playerSign = menuInputValidation(playerSign, 3);
+
+        cpuSign = rand() % 3 + 1; //cpu picks a random sign (index)
+
+
+        //determines game result
+        if (playerSign == 1) { //player chose rock
+
+            switch (cpuSign) {
+
+            case 0: //cpu also drew rock
+                printf("\nThe CPU drew Rock!\n");
+                break;
+
+            case 1: //cpu drew paper
+                printf("\nThe CPU drew Paper!\n");
+                printf("\nThe CPU Wins!\n");
+                return "CPU";
+
+            case 2: //cpu drew scissors
+                printf("\nThe CPU drew Scissors!\n");
+                printf("\nThe Player Wins!\n");
+                return "Player";
+
+            }
+        }
+
+        else if (playerSign == 2) { //player chose paper
+
+            switch (cpuSign) {
+
+            case 0: //cpu drew rock
+                printf("\nThe CPU drew Rock!\n");
+                printf("\nThe Player Wins!\n");
+                return "Player";
+
+            case 1: //cpu also drew paper
+                printf("\nThe CPU drew Paper!\n");
+                break;
+
+            case 2: //cpu drew scissors
+                printf("\nThe CPU drew Scissors!\n");
+                printf("\nThe CPU Wins!\n");
+                return "CPU";
+
+            }
+        }
+
+        else if (playerSign == 3) { //player chose scissors
+
+            switch (cpuSign) {
+
+            case 0: //cpu drew rock
+                printf("\nThe CPU drew Rock!\n");
+                printf("\nThe CPU Wins!\n");
+                return "CPU";
+
+            case 1: //cpu drew paper
+                printf("\nThe CPU drew Paper!\n");
+                printf("\nThe Player Wins!\n");
+                return "Player";
+
+            case 2: //cpu also drew scissors
+                printf("\nThe CPU drew Scissors!\n");
+                break;
+
+            }
+        }
+
+
+
+    }
+}
+
+// VARIABLE SETUP //
+
+std::vector<int>::iterator iterator; //allows for vector iteration
+
+UnoCard discardCard; //stores the current card to be compared to
+UnoCard startingCard;
+
+Participant* participantCurrentlyPlaying; //points to the Participant currently playing
+
+
+//player information setup
+
+std::string playerName = ""; //stores player name
+int playerAction = 0;
+int playerCardToDiscard = 0;
+int playerHandSize = 0;
+
+
+//cpu information setup
+
+int cpuAction = 0;
+int cpuCardToDiscard = 0;
+int cpuHandSize = 0;
+
+
+Player player;
+CPU cpu;
+
+Participant* currentParticipant = nullptr;
+//game loop setup
+
+int totalRounds = 1;

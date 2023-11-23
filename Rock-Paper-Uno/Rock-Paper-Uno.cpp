@@ -25,36 +25,8 @@ int main()
     //general setup
 
     srand(time(NULL));
-    std::vector<int>::iterator iterator; //allows for vector iteration
-
-    UnoCard discardCard; //stores the current card to be compared to
-    UnoCard startingCard;
-
-    participant* participantCurrentlyPlaying; //points to the participant currently playing
-
     
-    //player information setup
-
-    std::string playerName = ""; //stores player name
-    int playerAction = 0;
-    int playerCardToDiscard = 0;
-    int playerHandSize = 0;
-
-
-    //cpu information setup
-
-    int cpuAction = 0;
-    int cpuCardToDiscard = 0;
-    int cpuHandSize = 0;
-
-
-    Player player;
-    CPU cpu;
-
-
-    //game loop setup
-
-    int totalRounds = 1;
+    // game setup
 
     cpu.generateCard(startingCard.colourIndex, startingCard.number);
     discardCard = startingCard;
@@ -75,9 +47,20 @@ int main()
 
     Sleep(600);    
 
+    std::string currentPlayer = "";
+
     //game loop
     //runs until the player chooses to exit the game
     while (playerAction != 3) {
+
+        currentPlayer = rockPaperScissors();
+
+        if (currentPlayer == "Player") {
+            printf("AAAAAAAA");
+        }
+        else {
+            printf("BBBBBBBB");
+        }
 
         printf("\n- - - - - ROUND %i - - - - -\n", totalRounds);
 
@@ -109,7 +92,7 @@ int main()
             printf("\nEnter the index number of the card you wish to discard\n> ");
             
             std::cin >> playerCardToDiscard;
-            menuInputValidation(playerCardToDiscard, playerHandSize);
+            playerCardToDiscard = menuInputValidation(playerCardToDiscard, playerHandSize);
             playerCardToDiscard -= 1; //translates choice to maintain code accuracy
             
             discardCard = player.placeCard(playerCardToDiscard, discardCard);
