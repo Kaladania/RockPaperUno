@@ -461,7 +461,7 @@ std::string rockPaperScissors() {
         
         playerSign -= 1; //validates player input
 
-        cpuSign = rand() % 3 + 1; //cpu picks a random sign (index)
+        cpuSign = rand() % 2; //cpu picks a random sign (index)
 
         Sleep(200);
 

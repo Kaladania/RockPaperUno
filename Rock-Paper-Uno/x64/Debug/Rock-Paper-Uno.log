@@ -5,6 +5,6 @@ C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(351,16): message : consider using '%zi' in the format string
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(446,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(27,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(71): warning C4715: 'indexToColour': not all control paths return a value
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(56): warning C4715: 'isBanned': not all control paths return a value
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(71): warning C4715: 'indexToColour': not all control paths return a value
   Rock-Paper-Uno.vcxproj -> C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\x64\Debug\Rock-Paper-Uno.exe
