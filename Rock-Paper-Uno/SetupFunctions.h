@@ -439,23 +439,34 @@ bool foundInVector(std::vector<UnoCard>& dataToSearch, const UnoCard itemToFind)
 
 }
 
+
+// runs a Rock, Paper, Scissors Minigame
 std::string rockPaperScissors() {
+
+    srand(time(NULL));
 
     int playerSign = 0; //stores player's choosen sign
     int cpuSign = 0; //stores cpu's choosen sign
 
+    printf("\n\n - - - BATTLE TO CLAIM YOUR TURN! - - - -");
+    
+    Sleep(500);
+
     while (true) {
 
-        printf(" - - - BATTLE TO CLAIM YOUR TURN! - - - -");
+
         printf("\n\nWhat would you like to do?\n1. Rock   2. Paper   3. Scissor\n> ");
         std::cin >> playerSign;
         playerSign = menuInputValidation(playerSign, 3);
+        
+        playerSign -= 1; //validates player input
 
         cpuSign = rand() % 3 + 1; //cpu picks a random sign (index)
 
+        Sleep(200);
 
         //determines game result
-        if (playerSign == 1) { //player chose rock
+        if (playerSign == 0) { //player chose rock
 
             switch (cpuSign) {
 
@@ -476,7 +487,7 @@ std::string rockPaperScissors() {
             }
         }
 
-        else if (playerSign == 2) { //player chose paper
+        else if (playerSign == 1) { //player chose paper
 
             switch (cpuSign) {
 
@@ -497,7 +508,7 @@ std::string rockPaperScissors() {
             }
         }
 
-        else if (playerSign == 3) { //player chose scissors
+        else if (playerSign == 2) { //player chose scissors
 
             switch (cpuSign) {
 
@@ -518,7 +529,9 @@ std::string rockPaperScissors() {
             }
         }
 
+        printf("\nIt's a draw. GO AGAIN!\n");
 
+        Sleep(500);
 
     }
 }
