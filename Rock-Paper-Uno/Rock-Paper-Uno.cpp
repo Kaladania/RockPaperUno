@@ -1,5 +1,5 @@
 #include "SetupFunctions.h"
-
+#include "IntroFunctions.h"
 
 /*void handSetup(Player& player, Player& cpu) {
     player.generateHand(playerCard1.colourIndex, playerCard1.number);
@@ -27,16 +27,17 @@ int main()
 
     srand(time(NULL));
     
-    // game setup
-
-    cpu.generateCard(startingCard.colourIndex, startingCard.number, startingCard.powerUpIndex, 0);
-    discardCard = startingCard;
-
-    
     //beginning game functionality code
 
-    playerName = player.setPlayerName();
-    std::cout << "Hello, " << playerName << "!\n";
+    
+
+    playerData = gameIntro(player, playerData);
+
+    //playerName = playerData.name;
+    //playerAction = playerData.action;
+    //std::cout << "Hello, " << playerName << "!\n";
+    Sleep(500);
+
 
     Sleep(500);
 
@@ -48,11 +49,15 @@ int main()
 
     Sleep(600);    
 
+    // game setup
 
+    cpu.generateCard(startingCard.colourIndex, startingCard.number, startingCard.powerUpIndex, 0);
+    discardCard = startingCard;
 
     //game loop
     //runs until the player chooses to exit the game
-    while (playerAction != 3) {
+    // less than allows for intro to all stop game (option is #4)
+    while (playerData.action < 3) {
 
         printf("\n- - - - - ROUND %i - - - - -\n", totalRounds);
 
@@ -76,11 +81,11 @@ int main()
             //playerAction = player.chosenAction();
 
             printf("\n\nWhat would you like to do?\n1. Place a card   2. Pick up a card   3. Exit Game\n> ");
-            std::cin >> playerAction;
+            std::cin >> playerData.action;
 
-            playerAction = menuInputValidation(playerAction, 3);
+            playerData.action = menuInputValidation(playerData.action, 3);
 
-            switch (playerAction)
+            switch (playerData.action)
             {
             case placeCard: //place a card
 
@@ -114,12 +119,12 @@ int main()
                 switch (playerHandSize) //checks if player is about to/has won
                 {
                 case 1: //player has one card left
-                    std::cout << "\n" << playerName << " has an UNO!\n";
+                    std::cout << "\n" << playerData.name << " has an UNO!\n";
                     break;
 
                 case 0:
-                    std::cout << "\n" << playerName << " has no cards left! THEY WIN!!!\n";
-                    playerAction = 3; //triggers exit clause
+                    std::cout << "\n" << playerData.name << " has no cards left! THEY WIN!!!\n";
+                    playerData.action = 3; //triggers exit clause
                     break;
                 }
 
@@ -140,7 +145,7 @@ int main()
             }
         }
 
-        else { //cpu's turn
+        else if (currentPlayer == "CPU") { //cpu's turn
 
             printf("\n - - CPU'S TURN - - \n");
 
@@ -192,10 +197,16 @@ int main()
 
                 case 0:
                     std::cout << "\nThe CPU has no cards left! IT WINS!!!\n";
-                    playerAction = 3; //triggers exit clause
+                    playerData.action = 3; //triggers exit clause
                     break;
                 }
             }
+        }
+
+        else {
+
+            playerData.action = 3;
+
         }
 
         printf("\n");
@@ -204,4 +215,6 @@ int main()
         //updates tracker variables
         totalRounds++;
     }
+
+    printf("That's the end of the game. See ya next time!\n");
 }
