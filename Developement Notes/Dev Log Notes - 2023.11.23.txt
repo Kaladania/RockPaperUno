@@ -1,0 +1,22 @@
+Coded the rock, paper, scissors mini game to determine participant turn
+- originally going to use a point to point to the winner of the minigame
+	- thought it was a bit overkill as the same could be done with a normal variable to hold the minigame result
+- originally was going to have a variable store an exit clause (while participantsDrawed = False)
+	- however, realised that returns would automatically end the loop. Meaning that having an exit clause end the while loop THEN return a winner would be redudant.
+- ran into the same problem of rand returning the same set of variables each time the program is run
+
+altered the code functionality to have the player or cpu turn activate based in if the respective participant wins
+	- because this was a major restructuring of the code, chose to work on this in a branch in order to maintain a backup version incase the alterations broke the code.
+
+also restructed the code to display the player's hand and the discard card at the start of every round
+	- if not, you could theoratically lose the entire game without seeing your hand if the cpu wins every time (currently you only see your hand if its your turn)
+
+
+coded one of the special power up cards - Reveal a Card
+- reformatted code to have switch cases check for if a special card is played
+
+NEXT STEPS:
+
+- Save Data
+- +2, +4 and wild card
+- Intro screen
