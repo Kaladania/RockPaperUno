@@ -1,0 +1,3 @@
+use alot of switch statements, was wondering if its worth replacing the indexs with enummed values (i.e switch PLAYER instead of switch 1) or just use an if statement (both are for readability reasons, so also want to know if its worth it when I leave comments explaining what triggers the case).
+
+ask if it is okay to have srand repeatedly called by being set in a function

@@ -67,6 +67,8 @@ std::string indexToColour(const int index) {
         return "Green";
     case 3:
         return "Blue";
+    case 4:
+        return "Power UP Card: Reveal Card";
     }
 }
 
@@ -94,6 +96,11 @@ void printColour(const int colourIndex) {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
         break;
 
+    case 4:
+        //grey - powercard
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
+        break;
+
     case -1:
         //white - returns text to default white colour
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
@@ -113,10 +120,10 @@ void printColour(const int colourIndex) {
 //};
 
 
-// GAMEPLAY SETUP //
+// COLLECTION/CLASS SETUP //
 
 
-struct UnoCard {
+struct UnoCard { //Uno Card Structure
     int number = 0; //stores card number
     int colourIndex = 0; //stores card colour
     int powerUpIndex = 0; //stores card power up
@@ -170,12 +177,43 @@ public:
     }*/
 
     //randomly generates a card
-    void generateCard(int& cardColour, int& cardNumber) {
+    void generateCard(int& cardColour, int& cardNumber, const int filter) {
 
-        cardColour = rand() % 4;
-        cardNumber = rand() % 8;
+        int specialCardProbability = 0; //stores probability of drawing a special card
+        
+
+        switch (filter) //determines if game generates any type of card, a normal card or a power up
+        {
+        case 0: //generate any card
+
+            specialCardProbability = rand() % 101;
+
+            if (specialCardProbability > 80) { //20% of drawing a special card
+
+                cardColour = 4;
+                cardNumber = -1;
+            }
+            else { //80% chance of drawing a normal card
+
+                cardColour = rand() % 4;
+                cardNumber = rand() % 8;
+            }
+
+            break;
+        
+        case 1: //generate a normal card
+            cardColour = rand() % 4;
+            cardNumber = rand() % 8;
+
+            break;
+
+        case 2: //generate a special card
+            cardColour = 4;
+            cardNumber = -1;
+
+            break;
+        }
     }
-
 
     //sets up a new hand of 8 cards
     void handSetup(Participant& activeParticipant) {
@@ -184,7 +222,7 @@ public:
 
         for (int i = 0; i < 8; i++) {
 
-            activeParticipant.generateCard(newCard.colourIndex, newCard.number);
+            activeParticipant.generateCard(newCard.colourIndex, newCard.number, 0);
             hand.push_back(newCard);
         }
 
@@ -213,7 +251,7 @@ public:
     void drawCard() {
 
         UnoCard drawnCard; //card that has been drawn
-        generateCard(drawnCard.colourIndex, drawnCard.number);
+        generateCard(drawnCard.colourIndex, drawnCard.number, 0);
 
         hand.push_back(drawnCard); //adds a new card to the Participant's hand
         std::cout << "\nThe card ";
@@ -226,11 +264,34 @@ public:
 
     }
 
-
     int updateHandSize() {
 
         return hand.size();
     }
+
+    //reveals a random card from the opponets deck
+    void revealCard(const Participant& opponent) {
+
+        int revealIndex = 0;
+        UnoCard cardToReveal;
+
+        revealIndex = rand() % opponent.hand.size(); //choses a random card from opponents hand
+
+        cardToReveal = opponent.hand[revealIndex];
+
+        std::cout << "\nThe card ";
+        printColour(cardToReveal.colourIndex);
+        std::cout << indexToColour(cardToReveal.colourIndex);
+        printColour(-1);
+        std::cout << " " << cardToReveal.number << " was revealed\n";
+
+    }
+
+    void wildCard() {}
+
+    void draw2Cards() {}
+
+    void draw4Cards() {}
 };
 
 class Player : public Participant { //dedicated player class
@@ -319,7 +380,8 @@ public:
         do {
             chosenCard = hand[cardIndex];
 
-            if (chosenCard.colourIndex == discardCard.colourIndex || chosenCard.number == discardCard.number) {
+            //runs if its a matching card AND not a special card
+            if (chosenCard.colourIndex >= 4 || chosenCard.colourIndex == discardCard.colourIndex || chosenCard.number == discardCard.number) {
 
                 hand.erase(hand.begin() + cardIndex); //removes chosen card from Participant's hand
                 break;
@@ -379,10 +441,12 @@ public:
     //decides if CPU should draw or place a card
     int decideAction(UnoCard discardCard) {
 
+        
+
         for (int i = 0; i < hand.size(); i++) { //cpu looks to see if there is a card it can draw
 
-            //finds the first card that matches
-            if (hand[i].colourIndex == discardCard.colourIndex || hand[i].number == discardCard.number) {
+            //finds the first card that matches OR the first special card
+            if ((hand[i].colourIndex >= 4) || (hand[i].colourIndex == discardCard.colourIndex || hand[i].number == discardCard.number)) {
 
                 return i;
 
@@ -536,6 +600,7 @@ std::string rockPaperScissors() {
     }
 }
 
+
 // VARIABLE SETUP //
 
 std::vector<int>::iterator iterator; //allows for vector iteration
@@ -549,16 +614,16 @@ Participant* participantCurrentlyPlaying; //points to the Participant currently 
 //player information setup
 
 std::string playerName = ""; //stores player name
-int playerAction = 0;
-int playerCardToDiscard = 0;
-int playerHandSize = 0;
+int playerAction = 0; //stores player's chosen action
+int playerCardToDiscard = 0; //stores player's chosen card to discard
+int playerHandSize = 0; //stores the size of the player's hand
 
 
 //cpu information setup
 
-int cpuAction = 0;
-int cpuCardToDiscard = 0;
-int cpuHandSize = 0;
+int cpuAction = 0; //stores player's chosen action
+int cpuCardToDiscard = 0; //stores player's chosen card to discard
+int cpuHandSize = 0; //stores the size of the player's hand
 
 
 Player player;
