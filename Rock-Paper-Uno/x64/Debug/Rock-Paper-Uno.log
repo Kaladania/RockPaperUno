@@ -1,10 +1,10 @@
 ﻿  Rock-Paper-Uno.cpp
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(232,25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(332,65): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(351,16): warning C4477: 'printf' : format string '%i' requires an argument of type 'int', but variadic argument 1 has type 'unsigned __int64'
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(351,16): message : consider using '%zi' in the format string
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(446,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(269,25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(394,65): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(413,16): warning C4477: 'printf' : format string '%i' requires an argument of type 'int', but variadic argument 1 has type 'unsigned __int64'
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(413,16): message : consider using '%zi' in the format string
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(510,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(27,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(56): warning C4715: 'isBanned': not all control paths return a value
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(71): warning C4715: 'indexToColour': not all control paths return a value
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(73): warning C4715: 'indexToColour': not all control paths return a value
   Rock-Paper-Uno.vcxproj -> C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\x64\Debug\Rock-Paper-Uno.exe
