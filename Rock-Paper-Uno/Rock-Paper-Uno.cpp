@@ -1,5 +1,6 @@
 #include "SetupFunctions.h"
 
+
 /*void handSetup(Player& player, Player& cpu) {
     player.generateHand(playerCard1.colourIndex, playerCard1.number);
     player.generateHand(playerCard2.colourIndex, playerCard2.number);
@@ -28,7 +29,7 @@ int main()
     
     // game setup
 
-    cpu.generateCard(startingCard.colourIndex, startingCard.number, 0);
+    cpu.generateCard(startingCard.colourIndex, startingCard.number, startingCard.powerUpIndex, 0);
     discardCard = startingCard;
 
     
@@ -42,12 +43,12 @@ int main()
     player.handSetup(player);
     playerHandSize = player.updateHandSize();
 
-    cpu.handSetup(player);
+    cpu.handSetup(cpu);
     cpuHandSize = cpu.updateHandSize();
 
     Sleep(600);    
 
-    std::string currentPlayer = "";
+
 
     //game loop
     //runs until the player chooses to exit the game
@@ -59,9 +60,7 @@ int main()
 
         //prints out the discard card
         std::cout << "\n\nThe card currently at the top of the discrard pile is a ";
-        printColour(discardCard.colourIndex);
-        std::cout << indexToColour(discardCard.colourIndex);
-        printColour(-1); 
+        colouredText(discardCard.colourIndex);
         std::cout << " " << discardCard.number << "\n";
 
         Sleep(800);
@@ -83,7 +82,7 @@ int main()
 
             switch (playerAction)
             {
-            case 1: //place a card
+            case placeCard: //place a card
 
                 printf("\nEnter the index number of the card you wish to discard\n> ");
 
@@ -93,22 +92,20 @@ int main()
 
                 discardCard = player.placeCard(playerCardToDiscard, discardCard);
 
-                if (discardCard.colourIndex >= 4) {
+                if (discardCard.powerUpIndex > 0) { //runs a special event if a power-up card is played
 
-                    //runs a special event if a power-up card is played
-                    switch (discardCard.colourIndex)
+                    
+                    printf("\nFrom the CPU's hand: ");
+                    switch (discardCard.powerUpIndex)
                     {
-                    case 4: //reveals a card
+                    case 1: //reveals a card
                         player.revealCard(cpu);
+                        break;
+
+                    default:
+                        break;
                     }
 
-                    cpu.generateCard(discardCard.colourIndex, discardCard.number, 1); //generates a new card to replace the power up
-
-                    std::cout << "\nThe randomly draw card: ";
-                    printColour(discardCard.colourIndex);
-                    std::cout << indexToColour(discardCard.colourIndex);
-                    printColour(-1);
-                    std::cout << " " << discardCard.number << " will now be at the top of the discard pile\n";
                 }
 
 
@@ -129,13 +126,13 @@ int main()
 
                 break;
 
-            case 2: //draw a card
+            case drawCard: //draw a card
 
                 player.drawCard();
                 playerHandSize = player.updateHandSize();
                 break;
 
-            case 3: //exit game
+            case exitGame: //exit game
 
                 printf("\nYou've choosen to end the game. Goodbye!\n");
                 break;
@@ -169,22 +166,19 @@ int main()
 
 
                 //runs a special event if a power-up card is played
-                if (discardCard.colourIndex >= 4) {
+                if (discardCard.powerUpIndex > 0) {
 
-                    switch (discardCard.colourIndex)
+                    switch (discardCard.powerUpIndex)
                     {
-                    case 4: //reveals a card
+                    case 1: //reveals a card
+
+                        printf("\nFrom the Player's hand: ");
                         cpu.revealCard(player);
                         break;
+
+                    default:
+                        break;
                     }
-
-                    cpu.generateCard(discardCard.colourIndex, discardCard.number, 1); //generates a new card to replace the power up
-
-                    std::cout << "\nThe randomly draw card: ";
-                    printColour(discardCard.colourIndex);
-                    std::cout << indexToColour(discardCard.colourIndex);
-                    printColour(-1);
-                    std::cout << " " << discardCard.number << " will now be at the top of the discard pile\n";
                 }
                 
 
@@ -193,7 +187,7 @@ int main()
                 switch (cpuHandSize) //checks if CPU is about to/has won
                 {
                 case 1: //cpu has one card left
-                    std::cout << "\n The CPU has an UNO!\n";
+                    std::cout << "\nThe CPU has an UNO!\n";
                     break;
 
                 case 0:
