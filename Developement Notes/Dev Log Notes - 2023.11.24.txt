@@ -1,0 +1,25 @@
+Rearranged the solution project in order to better organise code
+	- realised that the reason I was having trouble creating additional cpp files was because I had the library inclusions exist with the definitions
+		- meant that whenever I tried to include the setup header file to get the libraries, the definitions were also being reincluded, causing errors
+
+	- created a new cpp file to store the code used for the game's intro screen.
+
+- wanted to further restructure the code to have functions in their own header file (to keep up with good practice), but after a discussion with James, decided against that due to the major possibility of things breaking so close to the deadline
+
+Included enums to improve readability
+
+thought about moving the player actions to their own seperate function (i.e lines 88 to 145 in ROCK-PAPER-UNO.cpp would be placed in their own seperate function)
+	- however decided against due to the copius amounts of variables being used meaning that alot of parameters would need to be passed into the function
+- that being said moved the code to display coloured cards into its own function
+	- reduced the amount of repeated code
+
+- decided to allow powerups to be played with both the same number AND the same colour (instead of just the latter) to make the game easier (and move faster)
+
+added QOL improvemets by clarifying if the card revealed or discarded was a power-up card, as well as the colour and letter of the power up card
+
+Creating the intro game screen
+
+Added code to exit from the screen AND the rock, paper, scissors minigame (can exit from all points now)
+
+redid some of the code to group the player variables (i.e name and chosen action) into a struct
+	- allows for both the name and player action to be returned from the intro screen to neaten code 

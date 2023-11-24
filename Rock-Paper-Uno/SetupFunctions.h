@@ -2,6 +2,7 @@
 #include "CommonLibraries.h"
 #include "UtilityFunctions.h"
 
+
 #define FOUNDIN(dataToSearch, itemToFind) (dataToSearch.find(itemToFind) != std::string::npos) //shorthand to make writing code to find existing items easier
 //#define FOUNDINCOLLECTION(dataToSearch, itemToFind, collectionLength) ((std::find(dataToSearch, dataToSearch+collectionLength, itemToFind)) != std::end(validCommands)) //exclusive FOUNDIN definition for pointers
 #define LENGTHOF(arrayToCheck) sizeof(arrayToCheck) / sizeof(arrayToCheck[0]) //shorthand to quickly determine the length of an array
@@ -36,6 +37,12 @@ struct UnoCard { //Uno Card Structure
     //    return *this;
     //}
 
+};
+
+struct PlayerData { //groups the various main function variables
+    
+    std::string name = ""; //stores player name
+    int action = 0; //stores player's chosen action
 };
 
 //overides == to allow for UnoCard struct comparisson
@@ -84,7 +91,7 @@ public:
 
             specialCardProbability = rand() % 101;
 
-            if (specialCardProbability > 50) { //5% of drawing a special card
+            if (specialCardProbability > 95) { //5% of drawing a special card
 
                 cardPowerUP = 1;
                 
@@ -182,10 +189,10 @@ public:
         std::cout << "\nThe";
 
         if (cardToReveal.powerUpIndex > 0) { //adds a card title if the card is a powerup card
-            std::cout << " Power Up ";
+            std::cout << " Power Up";
         }
 
-        std::cout << "card ";
+        std::cout << " card ";
         colouredText(cardToReveal.colourIndex);
         std::cout << " " << cardToReveal.number << " was revealed\n";
 
@@ -216,7 +223,7 @@ public:
         bool nameIsInappropriate = false; //stores if name was found in banList
         std::string uncheckedName; //holds the player's name input
 
-        std::cout << "Enter Name: ";
+        std::cout << "Enter your name: ";
         std::cin >> uncheckedName;
         nameIsInappropriate = isBanned(uncheckedName);
 
@@ -426,9 +433,9 @@ std::string rockPaperScissors() {
     while (true) {
 
 
-        printf("\n\nWhat would you like to do?\n1. Rock   2. Paper   3. Scissor\n> ");
+        printf("\n\nWhat would you like to do?\n1. Rock   2. Paper   3. Scissor   4. Exit Game\n> ");
         std::cin >> playerSign;
-        playerSign = menuInputValidation(playerSign, 3);
+        playerSign = menuInputValidation(playerSign, 4);
         
         playerSign -= 1; //validates player input
 
@@ -500,13 +507,16 @@ std::string rockPaperScissors() {
             }
         }
 
+        else { //player chooses to exit
+            return "exit";
+        }
+
         printf("\nIt's a draw. GO AGAIN!\n");
 
         Sleep(500);
 
     }
 }
-
 
 
 enum PlayerAction { //enumarated player actions
@@ -516,15 +526,15 @@ enum PlayerAction { //enumarated player actions
     exitGame = 3
 };
 
-enum Colour { //enumerated colours
-
-    red,
-    yellow,
-    green,
-    blue,
-    grey,
-    white = -1
-};
+////enum Colour { //enumerated colours
+//
+//    red,
+//    yellow,
+//    green,
+//    blue,
+//    grey,
+//    white = -1
+//};
 
 
 // VARIABLE SETUP //
@@ -539,8 +549,8 @@ Participant* participantCurrentlyPlaying; //points to the Participant currently 
 
 //player information setup
 
-std::string playerName = ""; //stores player name
-int playerAction = 0; //stores player's chosen action
+//std::string playerName = ""; //stores player name
+//int playerAction = 0; //stores player's chosen action
 int playerCardToDiscard = 0; //stores player's chosen card to discard
 int playerHandSize = 0; //stores the size of the player's hand
 
@@ -554,6 +564,8 @@ int cpuHandSize = 0; //stores the size of the player's hand
 
 Player player;
 CPU cpu;
+
+PlayerData playerData;
 
 //Participant* currentParticipant = nullptr;
 
