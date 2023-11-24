@@ -1,114 +1,10 @@
 #pragma once
-
-#include <iostream>
-#include <string>
-#include <Windows.h>
-#include <fstream>
-#include <map>
-#include <algorithm>
-#include <vector>
+#include "CommonLibraries.h"
+#include "UtilityFunctions.h"
 
 #define FOUNDIN(dataToSearch, itemToFind) (dataToSearch.find(itemToFind) != std::string::npos) //shorthand to make writing code to find existing items easier
 //#define FOUNDINCOLLECTION(dataToSearch, itemToFind, collectionLength) ((std::find(dataToSearch, dataToSearch+collectionLength, itemToFind)) != std::end(validCommands)) //exclusive FOUNDIN definition for pointers
 #define LENGTHOF(arrayToCheck) sizeof(arrayToCheck) / sizeof(arrayToCheck[0]) //shorthand to quickly determine the length of an array
-
-
-// UTILITY SETUP //
-
-
-//validates menu input
-int menuInputValidation(int optionChosen, int optionMax) //validates a user's input
-{
-
-    //runs until it gains a valid input
-    //checks to see if the input is out of range or not an int
-    while ((optionChosen > optionMax) || (optionChosen < 1) || std::cin.fail()) {
-        std::cin.clear();
-        std::cin.ignore(1000, '\n');
-        std::cout << "That is an invalid input. \nPlease chose a number within the range provided (1 - " << optionMax << "): ";
-        std::cin >> optionChosen;
-    }
-
-    return optionChosen; //returns the validated input
-}
-
-//checks if player's name is appropriate
-bool isBanned(std::string playerName) {
-
-    std::string bannedWord = ""; //current banned word to check
-
-    std::ifstream banList;
-    banList.open("BannedWords.txt");
-
-    //runs through the ban list and checks if the player name includes one of the blacklisted words
-    if (banList.is_open()) {
-        while (banList) {
-            std::getline(banList, bannedWord);
-
-            if (playerName == bannedWord) {
-                banList.close();
-                return true;
-            }
-        }
-        banList.close();
-        return false;
-    }
-}
-
-//converts the index to colour
-std::string indexToColour(const int index) {
-    switch (index) {
-
-    case 0:
-        return "Red";
-    case 1:
-        return "Yellow";
-    case 2:
-        return "Green";
-    case 3:
-        return "Blue";
-    case 4:
-        return "Power UP Card: Reveal Card";
-    }
-}
-
-//prints the cards in colour
-void printColour(const int colourIndex) {
-
-    switch (colourIndex) {
-    case 0:
-        //red
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
-        break;
-
-    case 1:
-        //yellow
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
-        break;
-
-    case 2:
-        //green
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
-        break;
-
-    case 3:
-        //blue
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
-        break;
-
-    case 4:
-        //grey - powercard
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
-        break;
-
-    case -1:
-        //white - returns text to default white colour
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-        break;
-    };
-}
-
-
 
 // wanted to enumarate card to increase readability
 // decided against it enums are not as flexible as ints (would require a lot of static casting)
@@ -177,7 +73,7 @@ public:
     }*/
 
     //randomly generates a card
-    void generateCard(int& cardColour, int& cardNumber, const int filter) {
+    void generateCard(int& cardColour, int& cardNumber, int& cardPowerUP, const int filter) {
 
         int specialCardProbability = 0; //stores probability of drawing a special card
         
@@ -188,29 +84,31 @@ public:
 
             specialCardProbability = rand() % 101;
 
-            if (specialCardProbability > 80) { //20% of drawing a special card
+            if (specialCardProbability > 50) { //5% of drawing a special card
 
-                cardColour = 4;
-                cardNumber = -1;
+                cardPowerUP = 1;
+                
             }
-            else { //80% chance of drawing a normal card
+            else { //95% chance of drawing a normal card
 
                 cardColour = rand() % 4;
                 cardNumber = rand() % 8;
             }
 
-            break;
         
-        case 1: //generate a normal card
-            cardColour = rand() % 4;
-            cardNumber = rand() % 8;
+        //case 1: //generate a normal card
+        //    cardColour = rand() % 4;
+        //    cardNumber = rand() % 8;
 
-            break;
+        //    break;
 
-        case 2: //generate a special card
-            cardColour = 4;
-            cardNumber = -1;
+        //case 2: //generate a special card
+        //    cardColour = 1;
+        //    cardNumber = rand() % 8;
 
+        //    break;
+
+        default:
             break;
         }
     }
@@ -222,7 +120,7 @@ public:
 
         for (int i = 0; i < 8; i++) {
 
-            activeParticipant.generateCard(newCard.colourIndex, newCard.number, 0);
+            activeParticipant.generateCard(newCard.colourIndex, newCard.number, newCard.powerUpIndex, 0);
             hand.push_back(newCard);
         }
 
@@ -238,10 +136,14 @@ public:
 
         hand.erase(hand.begin() + cardIndex); //removes chosen card from Participant's hand
 
-        std::cout << "\nThe card ";
-        printColour(chosenCard.colourIndex);
-        std::cout << indexToColour(chosenCard.colourIndex);
-        printColour(-1);
+        std::cout << "\nThe";
+
+        if (chosenCard.powerUpIndex > 0) { //adds a card title if the card is a powerup card
+            std::cout << " Power Up ";
+        }
+
+        std::cout << "card ";
+        colouredText(chosenCard.colourIndex);
         std::cout << " " << chosenCard.number << " was discarded\n";
 
         return chosenCard;
@@ -251,13 +153,11 @@ public:
     void drawCard() {
 
         UnoCard drawnCard; //card that has been drawn
-        generateCard(drawnCard.colourIndex, drawnCard.number, 0);
+        generateCard(drawnCard.colourIndex, drawnCard.number, drawnCard.powerUpIndex, 0);
 
         hand.push_back(drawnCard); //adds a new card to the Participant's hand
         std::cout << "\nThe card ";
-        printColour(drawnCard.colourIndex);
-        std::cout << indexToColour(drawnCard.colourIndex);
-        printColour(-1);
+        colouredText(drawnCard.colourIndex);
         std::cout << " " << drawnCard.number << " has been drawn.\n";
 
         //return drawnCard;
@@ -279,10 +179,14 @@ public:
 
         cardToReveal = opponent.hand[revealIndex];
 
-        std::cout << "\nThe card ";
-        printColour(cardToReveal.colourIndex);
-        std::cout << indexToColour(cardToReveal.colourIndex);
-        printColour(-1);
+        std::cout << "\nThe";
+
+        if (cardToReveal.powerUpIndex > 0) { //adds a card title if the card is a powerup card
+            std::cout << " Power Up ";
+        }
+
+        std::cout << "card ";
+        colouredText(cardToReveal.colourIndex);
         std::cout << " " << cardToReveal.number << " was revealed\n";
 
     }
@@ -381,7 +285,7 @@ public:
             chosenCard = hand[cardIndex];
 
             //runs if its a matching card AND not a special card
-            if (chosenCard.colourIndex >= 4 || chosenCard.colourIndex == discardCard.colourIndex || chosenCard.number == discardCard.number) {
+            if (chosenCard.powerUpIndex > 0 || chosenCard.colourIndex == discardCard.colourIndex || chosenCard.number == discardCard.number) {
 
                 hand.erase(hand.begin() + cardIndex); //removes chosen card from Participant's hand
                 break;
@@ -395,10 +299,14 @@ public:
             cardIndex -= 1;
         } while (chosenCard.colourIndex != discardCard.colourIndex || chosenCard.number != discardCard.number); //runs until player discards a valid card
 
-        std::cout << "\nThe card ";
-        printColour(chosenCard.colourIndex);
-        std::cout << indexToColour(chosenCard.colourIndex);
-        printColour(-1);
+        std::cout << "\nThe";
+        
+        if (chosenCard.powerUpIndex > 0) { //adds a card title if the card is a powerup card
+            std::cout << " Power Up ";
+        }
+
+        std::cout << "card ";
+        colouredText(chosenCard.colourIndex);
         std::cout << " " << chosenCard.number << " was discarded\n";
 
         return chosenCard;
@@ -415,10 +323,9 @@ public:
         for (int i = 0; i < hand.size(); i++) {
 
             std::cout << "\n" << i + 1 << ". ";
-            printColour(hand[i].colourIndex);
-            std::cout << indexToColour(hand[i].colourIndex);
-            printColour(-1);
-            std::cout << " " << hand[i].number << ",";
+            colouredText(hand[i].colourIndex);
+            std::cout << " " << hand[i].number;
+            printPowerUP(hand[i].powerUpIndex);
 
             Sleep(200);
 
@@ -446,7 +353,7 @@ public:
         for (int i = 0; i < hand.size(); i++) { //cpu looks to see if there is a card it can draw
 
             //finds the first card that matches OR the first special card
-            if ((hand[i].colourIndex >= 4) || (hand[i].colourIndex == discardCard.colourIndex || hand[i].number == discardCard.number)) {
+            if ((hand[i].powerUpIndex > 0) || (hand[i].colourIndex == discardCard.colourIndex || hand[i].number == discardCard.number)) {
 
                 return i;
 
@@ -601,6 +508,25 @@ std::string rockPaperScissors() {
 }
 
 
+
+enum PlayerAction { //enumarated player actions
+
+    placeCard = 1,
+    drawCard = 2,
+    exitGame = 3
+};
+
+enum Colour { //enumerated colours
+
+    red,
+    yellow,
+    green,
+    blue,
+    grey,
+    white = -1
+};
+
+
 // VARIABLE SETUP //
 
 std::vector<int>::iterator iterator; //allows for vector iteration
@@ -629,7 +555,9 @@ int cpuHandSize = 0; //stores the size of the player's hand
 Player player;
 CPU cpu;
 
-Participant* currentParticipant = nullptr;
+//Participant* currentParticipant = nullptr;
+
 //game loop setup
 
 int totalRounds = 1;
+std::string currentPlayer = "";

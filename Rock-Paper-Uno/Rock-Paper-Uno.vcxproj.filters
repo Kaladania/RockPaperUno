@@ -18,12 +18,21 @@
     <ClCompile Include="Rock-Paper-Uno.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IntroScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SetupFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SetupElements.h">
+    <ClInclude Include="CommonLibraries.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UtilityFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
