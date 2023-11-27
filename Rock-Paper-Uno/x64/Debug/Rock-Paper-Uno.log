@@ -1,9 +1,9 @@
 ﻿  Rock-Paper-Uno.cpp
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(231,25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(364,65): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(387,16): warning C4477: 'printf' : format string '%i' requires an argument of type 'int', but variadic argument 1 has type 'unsigned __int64'
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(387,16): message : consider using '%zi' in the format string
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(483,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(232,25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(366,65): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(389,16): warning C4477: 'printf' : format string '%i' requires an argument of type 'int', but variadic argument 1 has type 'unsigned __int64'
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(389,16): message : consider using '%zi' in the format string
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(485,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\IntroFunctions.h(15,3): warning C4129: '/': unrecognized character escape sequence
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\IntroFunctions.h(16,3): warning C4129: '/': unrecognized character escape sequence
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\IntroFunctions.h(17,3): warning C4129: '/': unrecognized character escape sequence

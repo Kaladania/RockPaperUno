@@ -25,9 +25,8 @@ int main()
 {
     //general setup
 
-    srand(time(NULL));
+    srand(time(NULL)); //creates a unique seed for the game
     
-
 
     //beginning game functionality code
 
@@ -35,66 +34,76 @@ int main()
 
     Sleep(500);
 
+    //game setup
+    //checks if player chose to play or exit the game
+    if (playerData.action == 1) { 
 
-
-    // GAME SETUP //
-
-    //checks if the player has save data to use
-    switch (playerSaveData.noSaveDataExists) { 
         
-    case true:
-        continueOldGame = 2;
-        break;
 
-    case false:
+        //checks if the player has save data to use
+        switch (playerSaveData.noSaveDataExists) {
 
-        //asks if the player want's to use their save data
-        printf("Would you like to continue with your existing game?"
-               "WARNING: If you choose to start a new game, your old save data will be OVERWRITTEN"
-               "\n\nContinue with existing game?\n1. Yes\n2. No\n> ");
-        std::cin >> continueOldGame;
+        case true:
+            continueOldGame = 2;
+            break;
 
-        continueOldGame = menuInputValidation(continueOldGame, 2);
+        case false:
+
+            //asks if the player want's to use their save data
+            printf("Would you like to continue with your existing game?"
+                "WARNING: If you choose to start a new game, your old save data will be OVERWRITTEN"
+                "\n\nContinue with existing game?\n1. Yes\n2. No\n> ");
+            std::cin >> continueOldGame;
+
+            continueOldGame = menuInputValidation(continueOldGame, 2);
+
+            break;
+        }
+
+
+        //determines if setup is fresh or from a save file
+        switch (continueOldGame) {
+
+        case 1: //continue from save
+
+            //imports player hand
+            player.createHandFromSaveFile(playerSaveData.hand);
+            playerData.handSize = playerSaveData.handCount;
+
+            //imports CPU hands
+            cpu.createHandFromSaveFile(playerSaveData.cpuHand);
+            cpuHandSize = playerSaveData.cpuHandCount;
+            
+            //imports round count and discard card
+            totalRounds = playerSaveData.totalRounds;
+            discardCard = playerSaveData.discardCard;
+
+            break;
+
+        case 2: //start new game
+
+            //creates a new hand of 8 random cards for the player
+            player.handSetup(player);
+            playerData.handSize = player.updateHandSize();
+
+            //creates a new hand of 8 random cards for the CPU
+            cpu.handSetup(cpu);
+            cpuHandSize = cpu.updateHandSize();
+
+            //generates a new card to assign as the 'discard card'
+            cpu.generateCard(startingCard.colourIndex, startingCard.number, startingCard.powerUpIndex, 0);
+            discardCard = startingCard;
+
+            break;
+        }
+
+        gameStarted = true;
     }
-   
-    
-    //determines if setup is fresh or from a save file
-    switch (continueOldGame) {
-
-    case 1:
-
-        //sets up player and cpu hand
-        player.createHandFromSaveFile(playerSaveData.hand);
-        playerData.handSize = playerSaveData.handCount;
-
-        cpu.createHandFromSaveFile(playerSaveData.cpuHand);
-        cpuHandSize = playerSaveData.cpuHandCount;
-
-        totalRounds = playerSaveData.totalRounds;
-        discardCard = playerSaveData.discardCard;
-        break;
-
-    case 2:
-
-        player.handSetup(player);
-        playerData.handSize = player.updateHandSize();
-
-        
-
-        cpu.handSetup(cpu);
-        cpuHandSize = cpu.updateHandSize();
-
-        cpu.generateCard(startingCard.colourIndex, startingCard.number, startingCard.powerUpIndex, 0);
-        discardCard = startingCard;
-        
-        break;
-    }
-
     
 
     //game loop
     //runs until the player chooses to exit the game
-    // less than allows for intro to all stop game (option is #4)
+    //less than allows for intro to all stop game (option is #4)
     while (playerData.action < 3) {
 
         printf("\n- - - - - ROUND %i - - - - -\n", totalRounds);
@@ -102,7 +111,7 @@ int main()
         Sleep(500);
 
         //prints out the discard card
-        std::cout << "\n\nThe card currently at the top of the discrard pile is a ";
+        std::cout << "\n\nThe card currently at the top of the discard pile is a ";
         colouredText(discardCard.colourIndex);
         std::cout << " " << discardCard.number << "\n";
 
@@ -110,7 +119,7 @@ int main()
         
         player.showHand();
 
-        currentPlayer = rockPaperScissors();
+        currentPlayer = rockPaperScissors(playerData);
 
         Sleep(800);
 
@@ -162,6 +171,7 @@ int main()
 
                 case 0:
                     std::cout << "\n" << playerData.name << " has no cards left! THEY WIN!!!\n";
+                    gameFinished = true;
                     playerData.action = 3; //triggers exit clause
                     break;
                 }
@@ -173,11 +183,12 @@ int main()
 
                 player.drawCard();
                 playerData.handSize = player.updateHandSize();
+
+                playerData.cardsDrawn++;
                 break;
 
             case exitGame: //exit game
 
-                printf("\nYou've choosen to end the game. Goodbye!\n");
                 break;
 
             }
@@ -235,6 +246,7 @@ int main()
 
                 case 0:
                     std::cout << "\nThe CPU has no cards left! IT WINS!!!\n";
+                    gameFinished = true;
                     playerData.action = 3; //triggers exit clause
                     break;
                 }
@@ -254,5 +266,21 @@ int main()
         totalRounds++;
     }
 
-    printf("That's the end of the game. See ya next time!\n");
+    //only create save data if the player had started playing the game
+    if (gameStarted) {
+
+        printf("Do you want to save your game so that you can continue playing later?\n1.Yes \n2.No");
+        std::cin >> playerData.action;
+
+        playerData.action = menuInputValidation(playerData.action, 2);
+        printf("Got it!");
+    }
+    
+    //only updates records if someone has won the game
+    if (gameFinished) {
+
+        updateRecord(playerRecordData, playerData, totalRounds, currentPlayer, continueOldGame);
+    }
+
+    printf("\n\nSee ya next time!\n");
 }
