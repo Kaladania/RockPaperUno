@@ -45,7 +45,7 @@ struct PlayerData { //groups the various main function variables
     int action = 0; //stores player's chosen action
 };
 
-struct PlayerSaveData {
+struct PlayerSaveData { //stores data to recreate the current game at a later date
 
     //stores the current player information to recreate the game
     std::string name = ""; //stores player name
@@ -61,9 +61,28 @@ struct PlayerSaveData {
     int totalRounds = 0;
 
     //stores info needed for accurate record keeping
-    int largestHand, a = 0; //stores the player's largest hand
+    int largestHand = 0; //stores the player's largest hand
     int totalCardsDrawn = 0; //stores the total amount of cards drawn
     
+    int rpsWon = 0; //stores how many RPS games won
+    int rpsLost = 0; //stores how many RPS games lost
+    int rpsDrawn = 0; //stores how many RPS games drawn
+};
+
+struct PlayerRecordData { //stores data on the player's history in RPU
+
+    //stores the current player information to recreate the game
+    std::string name = ""; //stores player name
+
+    int maxRounds = 0;
+
+    //stores info needed for accurate record keeping
+    int largestHand = 0; //stores the player's largest hand
+    int maxCardsDrawn = 0; //stores the total amount of cards drawn
+
+    int totalGamesWon = 0; //stores how many Games won
+    int totalGamesLost = 0; //stores how many Games lost
+
     int rpsWon = 0; //stores how many RPS games won
     int rpsLost = 0; //stores how many RPS games lost
     int rpsDrawn = 0; //stores how many RPS games drawn
@@ -588,6 +607,7 @@ CPU cpu;
 
 PlayerData playerData;
 PlayerSaveData playerSaveData;
+PlayerRecordData playerRecordData;
 
 //Participant* currentParticipant = nullptr;
 
