@@ -50,13 +50,7 @@ int main()
         case false:
 
             //asks if the player want's to use their save data
-            printf("Would you like to continue with your existing game?"
-                "\n\nWARNING: If you choose to start a new game, your old save data will be OVERWRITTEN");
-
-            Sleep(900);
-
-
-            printf("\n\nContinue with existing game?\n1. Yes\n2. No\n> ");
+            printf("\nWould you like to continue with your existing game?\n1. Yes   2. No\n> ");
             std::cin >> continueOldGame;
 
             continueOldGame = menuInputValidation(continueOldGame, 2);
@@ -273,23 +267,35 @@ int main()
     //only create save data if the player had started playing the game
     if (gameStarted) {
 
-        printf("\n- - - -  GAME ENDED - - - ");
+        printf("\n\n- - - -  GAME ENDED - - - ");
 
-        printf("\nDo you want to save your game so that you can continue playing later?\n1.Yes \n2.No\n> ");
+        printf("\nDo you want to save your game so that you can continue playing later?"
+            "\n\nWARNING: Doing so means that your old save data will be OVERWRITTEN!");
+
+        Sleep(900);
+
+        printf("\n\nSave Game?\n1. Yes   2. No\n> ");
         std::cin >> playerData.action;
 
         playerData.action = menuInputValidation(playerData.action, 2);
-        textSaveData = createSaveData(playerSaveData, playerData, player.storeToSaveFile(), cpu.storeToSaveFile(), totalRounds - 1, discardCard);
 
-        updateSaveData(playerData.name, textSaveData);
-        
+        if (playerData.action == 1) {
+
+            dataToWrite = createSaveData(playerSaveData, playerData, player.storeToSaveFile(), cpu.storeToSaveFile(), totalRounds - 1, discardCard);
+
+            updateSaveData(playerData.name, dataToWrite);
+        }
 
     }
     
     //only updates records if someone has won the game
     if (gameFinished) {
 
-        updateRecord(playerRecordData, playerData, playerSaveData, totalRounds, currentPlayer, continueOldGame);
+        updateRecords(playerRecordData, playerData, playerSaveData, totalRounds-1, currentPlayer, continueOldGame);
+
+        dataToWrite = createRecordData(playerRecordData);
+
+        saveRecordData(playerData.name, dataToWrite);
     }
 
     printf("\n\nSee ya next time!\n");

@@ -604,57 +604,6 @@ std::string rockPaperScissors(PlayerData& playerData) {
 }
 
 
-//updates player records
-void updateRecord(PlayerRecordData& recordData, const PlayerData& playerData, const PlayerSaveData& saveData, const int totalRounds, const std::string winner, const int continueOldGame){
-
-
-    //updates longest game stat
-    if (totalRounds > recordData.maxRounds) { 
-
-        recordData.maxRounds = totalRounds;
-    }
-
-    //updates largest hand stat
-    if (playerData.handSize > recordData.largestHand) { 
-
-        recordData.largestHand = playerData.handSize;
-    }
-    
-    //updates no. of cards drawn stat
-    if (playerData.cardsDrawn > recordData.maxCardsDrawn) { 
-
-        recordData.maxCardsDrawn = playerData.cardsDrawn;
-    }
-
-    //updates win/lose stat
-    if (winner == "Player") {
-
-        recordData.totalGamesWon++;
-    }
-    else {
-
-        recordData.totalGamesLost++;
-    }
-
-    //updates RPS win/lose/draw stat
-    //checks if game was continued from save to get the total stat
-    if (continueOldGame == 1) { 
-
-        recordData.rpsWon = playerData.rpsWon + saveData.rpsWon;
-        recordData.rpsLost = playerData.rpsLost + saveData.rpsLost;
-        recordData.rpsDrawn = playerData.rpsDrawn + saveData.rpsDrawn;
-
-    }
-    else {
-
-        recordData.rpsWon = playerData.rpsWon;
-        recordData.rpsLost = playerData.rpsLost;
-        recordData.rpsDrawn = playerData.rpsDrawn;
-
-    }
-
-}
-
 
 //converts the passed UnoCard into a string format for save file
 std::string formatCardData(const UnoCard cardToSave) {
@@ -737,10 +686,97 @@ void updateSaveData(const std::string playerName, const std::string saveData) {
 
     saveFile.close();
 
+    Sleep(500);
+
     printf("\n\nYour game data has been saved");
 
 }
 
+//updates player records
+void updateRecords(PlayerRecordData& recordData, const PlayerData& playerData, const PlayerSaveData& saveData, const int totalRounds, const std::string winner, const int continueOldGame) {
+
+
+    //updates longest game stat
+    if (totalRounds > recordData.maxRounds) {
+
+        recordData.maxRounds = totalRounds;
+    }
+
+    //updates largest hand stat
+    if (playerData.handSize > recordData.largestHand) {
+
+        recordData.largestHand = playerData.handSize;
+    }
+
+    //updates no. of cards drawn stat
+    if (playerData.cardsDrawn > recordData.maxCardsDrawn) {
+
+        recordData.maxCardsDrawn = playerData.cardsDrawn;
+    }
+
+    //updates win/lose stat
+    if (winner == "Player") {
+
+        recordData.totalGamesWon++;
+    }
+    else {
+
+        recordData.totalGamesLost++;
+    }
+
+    //updates RPS win/lose/draw stat
+    //checks if game was continued from save to get the total stat
+    if (continueOldGame == 1) {
+
+        recordData.rpsWon = playerData.rpsWon + saveData.rpsWon;
+        recordData.rpsLost = playerData.rpsLost + saveData.rpsLost;
+        recordData.rpsDrawn = playerData.rpsDrawn + saveData.rpsDrawn;
+
+    }
+    else {
+
+        recordData.rpsWon = playerData.rpsWon;
+        recordData.rpsLost = playerData.rpsLost;
+        recordData.rpsDrawn = playerData.rpsDrawn;
+
+    }
+
+}
+
+std::string createRecordData(PlayerRecordData& recordData) {
+
+    std::string formattedText = "";
+
+    //saves player name, current round and hand size
+    formattedText.append(recordData.name + " " + std::to_string(recordData.maxRounds) + " " 
+        + std::to_string(recordData.largestHand) + " " + std::to_string(recordData.maxCardsDrawn) + " "
+        + std::to_string(recordData.totalGamesWon) + " " + std::to_string(recordData.totalGamesLost) + " "
+        + std::to_string(recordData.rpsWon) + " " + std::to_string(recordData.rpsLost) + " "
+        + std::to_string(recordData.rpsDrawn) + " ");
+
+    return formattedText;
+
+}
+
+void saveRecordData(const std::string playerName, const std::string recordData) {
+
+    //creates file path
+    std::string fileName = "RecordData\\";
+    fileName.append(playerName);
+    fileName.append(".txt");
+
+    //opens the existing record file with the intention to overwrite any data within it
+    std::ofstream saveFile = std::ofstream(fileName, std::ios::trunc);
+
+    saveFile << recordData; //overwrites save data
+
+    saveFile.close();
+
+    Sleep(500);
+
+    printf("\n\nYour game records have been updated!");
+
+}
 
 
 enum PlayerAction { //enumarated player actions
@@ -772,7 +808,7 @@ bool gameFinished = false; //checks if someone has won
 
 
 int continueOldGame = 0; //states if the player wants to continue from save data
-std::string textSaveData = ""; //stores the formatted saveData
+std::string dataToWrite = ""; //stores the formatted saveData
 
 
 //cpu information setup
@@ -794,4 +830,3 @@ PlayerRecordData playerRecordData;
 int totalRounds = 1;
 std::string currentPlayer = "";
 bool gameStarted = false;
-bool gameEnded = false;
