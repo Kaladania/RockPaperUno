@@ -194,6 +194,30 @@ public:
         hand = saveDataHand;
     }
 
+    //imports hand from save data
+    std::vector<UnoCard> storeToSaveFile() {
+
+        return hand;
+    }
+
+    //reveals all the cards currently in the players hand
+    void showHand() {
+
+
+        printf("\nYou currently have %i cards in your hand. They are the following:\n", hand.size());
+
+        for (int i = 0; i < hand.size(); i++) {
+
+            std::cout << "\n" << i + 1 << ". ";
+            colouredText(hand[i].colourIndex);
+            std::cout << " " << hand[i].number;
+            printPowerUP(hand[i].powerUpIndex);
+
+            Sleep(200);
+
+        }
+    }
+
     //discards choosen card from Participant's hand
     UnoCard placeCard(int& cardIndex, UnoCard& discardCard) {
 
@@ -342,10 +366,6 @@ public:
         return hand;
     };*/
 
-    void setupFromSaveFile(PlayerSaveData& saveData) {
-
-        hand = saveData.hand;
-    }
 
     //discards choosen card from Participant's hand
     UnoCard placeCard(int& cardIndex, UnoCard& discardCard) {
@@ -383,25 +403,6 @@ public:
 
         return chosenCard;
 
-    }
-
-
-    //reveals all the cards currently in the players hand
-    void showHand() {
-
-
-        printf("\nYou currently have %i cards in your hand. They are the following:\n", hand.size());
-
-        for (int i = 0; i < hand.size(); i++) {
-
-            std::cout << "\n" << i + 1 << ". ";
-            colouredText(hand[i].colourIndex);
-            std::cout << " " << hand[i].number;
-            printPowerUP(hand[i].powerUpIndex);
-
-            Sleep(200);
-
-        }
     }
 
     //int chosenAction() {//gets the player's chosen action and validates it
@@ -604,7 +605,7 @@ std::string rockPaperScissors(PlayerData& playerData) {
 
 
 //updates player records
-void updateRecord(PlayerRecordData& recordData, const PlayerData& playerData, const int totalRounds, const std::string winner, const int continueOldGame){
+void updateRecord(PlayerRecordData& recordData, const PlayerData& playerData, const PlayerSaveData& saveData, const int totalRounds, const std::string winner, const int continueOldGame){
 
 
     //updates longest game stat
@@ -639,9 +640,9 @@ void updateRecord(PlayerRecordData& recordData, const PlayerData& playerData, co
     //checks if game was continued from save to get the total stat
     if (continueOldGame == 1) { 
 
-        recordData.rpsWon = playerData.rpsWon + playerSaveData.rpsWon;
-        recordData.rpsLost = playerData.rpsLost + playerSaveData.rpsLost;
-        recordData.rpsDrawn = playerData.rpsDrawn + playerSaveData.rpsDrawn;
+        recordData.rpsWon = playerData.rpsWon + saveData.rpsWon;
+        recordData.rpsLost = playerData.rpsLost + saveData.rpsLost;
+        recordData.rpsDrawn = playerData.rpsDrawn + saveData.rpsDrawn;
 
     }
     else {
@@ -653,6 +654,93 @@ void updateRecord(PlayerRecordData& recordData, const PlayerData& playerData, co
     }
 
 }
+
+
+//converts the passed UnoCard into a string format for save file
+std::string formatCardData(const UnoCard cardToSave) {
+
+    std::string formattedCard = "";
+
+    formattedCard.append(std::to_string(cardToSave.colourIndex) + "-");
+    formattedCard.append(std::to_string(cardToSave.number) + "-");
+    formattedCard.append(std::to_string(cardToSave.powerUpIndex));
+   
+    return formattedCard;
+
+}
+
+std::string createSaveData(PlayerSaveData& saveData, const PlayerData& playerData, const std::vector<UnoCard>& playerHand, const std::vector<UnoCard>& cpuHand, const int currentRound, const UnoCard discardCard) {
+
+    std::string formattedText = "";
+
+    //saves player name, current round and hand size
+    formattedText.append(playerData.name + " " + std::to_string(currentRound) + " " + std::to_string(playerHand.size()) + " ");
+
+    //saves all the cards in the player's hand
+    for (UnoCard card : playerHand) {
+
+        formattedText.append(formatCardData(card) + " ");
+
+    }
+
+
+    //saves cpu's hand size
+    formattedText.append(std::to_string(cpuHand.size()) + " ");
+
+    //saves all the cards in the player's hand
+    for (UnoCard card : cpuHand) {
+
+        formattedText.append(formatCardData(card) + " ");
+
+    }
+
+    //saves the current discard card
+    formattedText.append(formatCardData(discardCard) + " ");
+
+    //updates the "largest hand size" stat
+    if (playerHand.size() > saveData.largestHand) {
+        formattedText.append(std::to_string(playerHand.size()) + " ");
+    }
+    else {
+        formattedText.append(std::to_string(saveData.largestHand) + " ");
+    }
+
+    //updates the "most amount of cards drawn" stat
+    if (playerData.cardsDrawn > saveData.totalCardsDrawn) {
+        formattedText.append(std::to_string(playerData.cardsDrawn) + " ");
+    }
+    else {
+        formattedText.append(std::to_string(saveData.totalCardsDrawn) + " ");
+    }
+
+    //updates the Rock, Paper, Scissors minigame stats
+    formattedText.append(std::to_string(saveData.rpsWon + playerData.rpsWon) + " ");
+    formattedText.append(std::to_string(saveData.rpsLost + playerData.rpsLost) + " ");
+    formattedText.append(std::to_string(saveData.rpsDrawn + playerData.rpsDrawn) + " ");
+
+
+    return formattedText;
+    
+}
+
+void updateSaveData(const std::string playerName, const std::string saveData) {
+
+    //creates file path
+	std::string fileName = "SaveData\\";
+	fileName.append(playerName);
+	fileName.append(".txt");
+
+    //opens the existing save file with the intention to overwrite any data within it
+    std::ofstream saveFile = std::ofstream(fileName, std::ios::trunc);
+
+    saveFile << saveData; //overwrites save data
+
+    saveFile.close();
+
+    printf("\n\nYour game data has been saved");
+
+}
+
 
 
 enum PlayerAction { //enumarated player actions
@@ -684,6 +772,7 @@ bool gameFinished = false; //checks if someone has won
 
 
 int continueOldGame = 0; //states if the player wants to continue from save data
+std::string textSaveData = ""; //stores the formatted saveData
 
 
 //cpu information setup

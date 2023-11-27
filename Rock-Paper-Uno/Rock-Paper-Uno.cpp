@@ -51,8 +51,12 @@ int main()
 
             //asks if the player want's to use their save data
             printf("Would you like to continue with your existing game?"
-                "WARNING: If you choose to start a new game, your old save data will be OVERWRITTEN"
-                "\n\nContinue with existing game?\n1. Yes\n2. No\n> ");
+                "\n\nWARNING: If you choose to start a new game, your old save data will be OVERWRITTEN");
+
+            Sleep(900);
+
+
+            printf("\n\nContinue with existing game?\n1. Yes\n2. No\n> ");
             std::cin >> continueOldGame;
 
             continueOldGame = menuInputValidation(continueOldGame, 2);
@@ -269,17 +273,23 @@ int main()
     //only create save data if the player had started playing the game
     if (gameStarted) {
 
-        printf("Do you want to save your game so that you can continue playing later?\n1.Yes \n2.No");
+        printf("\n- - - -  GAME ENDED - - - ");
+
+        printf("\nDo you want to save your game so that you can continue playing later?\n1.Yes \n2.No\n> ");
         std::cin >> playerData.action;
 
         playerData.action = menuInputValidation(playerData.action, 2);
-        printf("Got it!");
+        textSaveData = createSaveData(playerSaveData, playerData, player.storeToSaveFile(), cpu.storeToSaveFile(), totalRounds - 1, discardCard);
+
+        updateSaveData(playerData.name, textSaveData);
+        
+
     }
     
     //only updates records if someone has won the game
     if (gameFinished) {
 
-        updateRecord(playerRecordData, playerData, totalRounds, currentPlayer, continueOldGame);
+        updateRecord(playerRecordData, playerData, playerSaveData, totalRounds, currentPlayer, continueOldGame);
     }
 
     printf("\n\nSee ya next time!\n");

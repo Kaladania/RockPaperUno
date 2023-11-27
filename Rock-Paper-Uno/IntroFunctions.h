@@ -242,9 +242,9 @@ void showPlayerRecord(const PlayerRecordData& recordData) {
 	Sleep(200);
 	std::cout << "\nLongest Game: " << recordData.maxRounds << " Rounds";
 	Sleep(200);
-	std::cout << "\nLargest hand: " << recordData.largestHand;
+	std::cout << "\nLargest hand: " << recordData.largestHand << " cards";
 	Sleep(200);
-	std::cout << "\nLargest No. of cards drawn : " << recordData.maxCardsDrawn;
+	std::cout << "\Most amount of cards drawn: " << recordData.maxCardsDrawn;
 	Sleep(200);
 	std::cout << "\nTotal Games Won: " << recordData.totalGamesWon;
 	Sleep(200);
