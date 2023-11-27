@@ -1,0 +1,9 @@
+Improvements:
+- use the filesystem library to create a function to check if there is save data for a similar name (i.e ask if the player meant "james" instead of "james3" as there is save data for the former)
+	- in addition to this, create a password system to protect save data incase somebody uses this check to try/accidentally taint another player's save data
+
+- could alter the layout of the intro code to ask and only make save data WHEN the player wishes to save. Reduces the amount of blank txt files created if the player wisged to exit without saving
+
+restructure the code in a way that doesn't require the player class to be imported JUST to use
+
+now that files are being communicated with, add further checks to the player username to ensure that it doesn't inlcude characters illegal in file names (such as * " / \ < > : | ?)

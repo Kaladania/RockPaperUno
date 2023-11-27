@@ -9,6 +9,14 @@ Cards:
 - []
 - []
 
+CPU Hand count: [] cards
+Cards:
+- []
+- []
+- []
+- []
+- []
+
 Current discard card: []
 
 - - - - - 
@@ -18,3 +26,8 @@ Number of cards drawn: []
 Total Rock, Paper, Scissors Games Won: []
 Total Rock, Paper, Scissors Games Lost: []
 Total Rock, Paper, Scissors Games Draw: []
+
+
+James 47 6 red-8-0 blue-5-0 yellow-0-0 yellow-0-1 green-2-0 red-5-1 4 yellow-7-0 blue-0-1 red-5-0 red-5-1 blue-5-0 10 4 20 45 16
+
+James 47 6 0-8-0 3-5-0 1-0-0 1-0-1 2-2-0 1-5-1 4 1-7-0 3-0-1 0-5-0 0-5-1 3-5-0 10 4 20 45 16
