@@ -43,6 +43,8 @@ struct PlayerData { //groups the various main function variables
     
     std::string name = ""; //stores player name
     int action = 0; //stores player's chosen action
+    int handSize = 0; //stores the size of the player's hand
+    int cardToDiscard = 0; //stores player's chosen card to discard
 };
 
 struct PlayerSaveData { //stores data to recreate the current game at a later date
@@ -88,6 +90,10 @@ struct PlayerRecordData { //stores data on the player's history in RPU
     int rpsWon = 0; //stores how many RPS games won
     int rpsLost = 0; //stores how many RPS games lost
     int rpsDrawn = 0; //stores how many RPS games drawn
+};
+
+struct CPUData { //groups the various main function variables
+
 };
 
 //overides == to allow for UnoCard struct comparisson
@@ -175,6 +181,12 @@ public:
         }
 
         //return hand;
+    }
+
+    //imports hand from save data
+    void createHandFromSaveFile(const std::vector<UnoCard>& saveDataHand) {
+
+        hand = saveDataHand;
     }
 
     //discards choosen card from Participant's hand
@@ -323,6 +335,11 @@ public:
 
         return hand;
     };*/
+
+    void setupFromSaveFile(PlayerSaveData& saveData) {
+
+        hand = saveData.hand;
+    }
 
     //discards choosen card from Participant's hand
     UnoCard placeCard(int& cardIndex, UnoCard& discardCard) {
@@ -589,19 +606,12 @@ UnoCard startingCard;
 Participant* participantCurrentlyPlaying; //points to the Participant currently playing
 
 
-//player information setup
-
-//std::string playerName = ""; //stores player name
-//int playerAction = 0; //stores player's chosen action
-int playerCardToDiscard = 0; //stores player's chosen card to discard
-int playerHandSize = 0; //stores the size of the player's hand
+int continueOldGame = 0; //states if the player wants to continue from save data
 
 
 //cpu information setup
-
-int cpuAction = 0; //stores player's chosen action
-int cpuCardToDiscard = 0; //stores player's chosen card to discard
-int cpuHandSize = 0; //stores the size of the player's hand
+int cpuCardToDiscard = 0; //stores cpu's chosen card to discard
+int cpuHandSize = 0; //stores the size of the cpu's hand
 
 
 Player player;

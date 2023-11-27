@@ -37,18 +37,60 @@ int main()
 
 
 
-    player.handSetup(player);
-    playerHandSize = player.updateHandSize();
+    // GAME SETUP //
 
-    cpu.handSetup(cpu);
-    cpuHandSize = cpu.updateHandSize();
+    //checks if the player has save data to use
+    switch (playerSaveData.noSaveDataExists) { 
+        
+    case true:
+        continueOldGame = 2;
+        break;
 
-    Sleep(600);    
+    case false:
 
-    // game setup
+        //asks if the player want's to use their save data
+        printf("Would you like to continue with your existing game?"
+               "WARNING: If you choose to start a new game, your old save data will be OVERWRITTEN"
+               "\n\nContinue with existing game?\n1. Yes\n2. No\n> ");
+        std::cin >> continueOldGame;
 
-    cpu.generateCard(startingCard.colourIndex, startingCard.number, startingCard.powerUpIndex, 0);
-    discardCard = startingCard;
+        continueOldGame = menuInputValidation(continueOldGame, 2);
+    }
+   
+    
+    //determines if setup is fresh or from a save file
+    switch (continueOldGame) {
+
+    case 1:
+
+        //sets up player and cpu hand
+        player.createHandFromSaveFile(playerSaveData.hand);
+        playerData.handSize = playerSaveData.handCount;
+
+        cpu.createHandFromSaveFile(playerSaveData.cpuHand);
+        cpuHandSize = playerSaveData.cpuHandCount;
+
+        totalRounds = playerSaveData.totalRounds;
+        discardCard = playerSaveData.discardCard;
+        break;
+
+    case 2:
+
+        player.handSetup(player);
+        playerData.handSize = player.updateHandSize();
+
+        
+
+        cpu.handSetup(cpu);
+        cpuHandSize = cpu.updateHandSize();
+
+        cpu.generateCard(startingCard.colourIndex, startingCard.number, startingCard.powerUpIndex, 0);
+        discardCard = startingCard;
+        
+        break;
+    }
+
+    
 
     //game loop
     //runs until the player chooses to exit the game
@@ -87,11 +129,11 @@ int main()
 
                 printf("\nEnter the index number of the card you wish to discard\n> ");
 
-                std::cin >> playerCardToDiscard;
-                playerCardToDiscard = menuInputValidation(playerCardToDiscard, playerHandSize);
-                playerCardToDiscard -= 1; //translates choice to maintain code accuracy
+                std::cin >> playerData.cardToDiscard;
+                playerData.cardToDiscard = menuInputValidation(playerData.cardToDiscard, playerData.handSize);
+                playerData.cardToDiscard -= 1; //translates choice to maintain code accuracy
 
-                discardCard = player.placeCard(playerCardToDiscard, discardCard);
+                discardCard = player.placeCard(playerData.cardToDiscard, discardCard);
 
                 if (discardCard.powerUpIndex > 0) { //runs a special event if a power-up card is played
 
@@ -110,9 +152,9 @@ int main()
                 }
 
 
-                playerHandSize = player.updateHandSize();
+                playerData.handSize = player.updateHandSize();
 
-                switch (playerHandSize) //checks if player is about to/has won
+                switch (playerData.handSize) //checks if player is about to/has won
                 {
                 case 1: //player has one card left
                     std::cout << "\n" << playerData.name << " has an UNO!\n";
@@ -130,7 +172,7 @@ int main()
             case drawCard: //draw a card
 
                 player.drawCard();
-                playerHandSize = player.updateHandSize();
+                playerData.handSize = player.updateHandSize();
                 break;
 
             case exitGame: //exit game
