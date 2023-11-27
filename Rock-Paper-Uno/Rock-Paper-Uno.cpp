@@ -31,7 +31,7 @@ int main()
 
     
 
-    playerData = gameIntro(player, playerData);
+    playerData = gameIntro(player, playerData, playerSaveData);
 
     //playerName = playerData.name;
     //playerAction = playerData.action;
