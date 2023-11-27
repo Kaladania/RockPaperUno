@@ -122,4 +122,3 @@ void printPowerUP(const int powerUPIndex) {
     }
 
 }
-

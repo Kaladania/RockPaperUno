@@ -43,9 +43,18 @@ struct PlayerData { //groups the various main function variables
     
     std::string name = ""; //stores player name
     int action = 0; //stores player's chosen action
+    int handSize = 0; //stores the size of the player's hand
+    int cardToDiscard = 0; //stores player's chosen card to discard
+    int cardsDrawn = 0; //stores the amount of cards drawn during the game
+
+    int rpsWon = 0; //stores how many RPS games won
+    int rpsLost = 0; //stores how many RPS games lost
+    int rpsDrawn = 0; //stores how many RPS games drawn
 };
 
-struct PlayerSaveData {
+struct PlayerSaveData { //stores data to recreate the current game at a later date
+
+    bool noSaveDataExists = true; //state if the player currently has an active save
 
     //stores the current player information to recreate the game
     std::string name = ""; //stores player name
@@ -61,12 +70,35 @@ struct PlayerSaveData {
     int totalRounds = 0;
 
     //stores info needed for accurate record keeping
-    int largestHand, a = 0; //stores the player's largest hand
+    int largestHand = 0; //stores the player's largest hand
     int totalCardsDrawn = 0; //stores the total amount of cards drawn
     
     int rpsWon = 0; //stores how many RPS games won
     int rpsLost = 0; //stores how many RPS games lost
     int rpsDrawn = 0; //stores how many RPS games drawn
+};
+
+struct PlayerRecordData { //stores data on the player's history in RPU
+
+    //stores the current player information to recreate the game
+    std::string name = ""; //stores player name
+
+    int maxRounds = 0;
+
+    //stores info needed for accurate record keeping
+    int largestHand = 0; //stores the player's largest hand
+    int maxCardsDrawn = 0; //stores the total amount of cards drawn
+
+    int totalGamesWon = 0; //stores how many Games won
+    int totalGamesLost = 0; //stores how many Games lost
+
+    int rpsWon = 0; //stores how many RPS games won
+    int rpsLost = 0; //stores how many RPS games lost
+    int rpsDrawn = 0; //stores how many RPS games drawn
+};
+
+struct CPUData { //groups the various main function variables
+
 };
 
 //overides == to allow for UnoCard struct comparisson
@@ -156,6 +188,36 @@ public:
         //return hand;
     }
 
+    //imports hand from save data
+    void createHandFromSaveFile(const std::vector<UnoCard>& saveDataHand) {
+
+        hand = saveDataHand;
+    }
+
+    //imports hand from save data
+    std::vector<UnoCard> storeToSaveFile() {
+
+        return hand;
+    }
+
+    //reveals all the cards currently in the players hand
+    void showHand() {
+
+
+        printf("\nYou currently have %i cards in your hand. They are the following:\n", hand.size());
+
+        for (int i = 0; i < hand.size(); i++) {
+
+            std::cout << "\n" << i + 1 << ". ";
+            colouredText(hand[i].colourIndex);
+            std::cout << " " << hand[i].number;
+            printPowerUP(hand[i].powerUpIndex);
+
+            Sleep(200);
+
+        }
+    }
+
     //discards choosen card from Participant's hand
     UnoCard placeCard(int& cardIndex, UnoCard& discardCard) {
 
@@ -232,6 +294,7 @@ class Player : public Participant { //dedicated player class
 private:
     std::string name; //player name
 
+
 public:
 
    /* Player() {
@@ -303,6 +366,7 @@ public:
         return hand;
     };*/
 
+
     //discards choosen card from Participant's hand
     UnoCard placeCard(int& cardIndex, UnoCard& discardCard) {
 
@@ -339,25 +403,6 @@ public:
 
         return chosenCard;
 
-    }
-
-
-    //reveals all the cards currently in the players hand
-    void showHand() {
-
-
-        printf("\nYou currently have %i cards in your hand. They are the following:\n", hand.size());
-
-        for (int i = 0; i < hand.size(); i++) {
-
-            std::cout << "\n" << i + 1 << ". ";
-            colouredText(hand[i].colourIndex);
-            std::cout << " " << hand[i].number;
-            printPowerUP(hand[i].powerUpIndex);
-
-            Sleep(200);
-
-        }
     }
 
     //int chosenAction() {//gets the player's chosen action and validates it
@@ -440,7 +485,7 @@ bool foundInVector(std::vector<UnoCard>& dataToSearch, const UnoCard itemToFind)
 
 
 // runs a Rock, Paper, Scissors Minigame
-std::string rockPaperScissors() {
+std::string rockPaperScissors(PlayerData& playerData) {
 
     srand(time(NULL));
 
@@ -476,11 +521,17 @@ std::string rockPaperScissors() {
             case 1: //cpu drew paper
                 printf("\nThe CPU drew Paper!\n");
                 printf("\nThe CPU Wins!\n");
+
+                playerData.rpsLost++;
+
                 return "CPU";
 
             case 2: //cpu drew scissors
                 printf("\nThe CPU drew Scissors!\n");
                 printf("\nThe Player Wins!\n");
+
+                playerData.rpsWon++;
+
                 return "Player";
 
             }
@@ -493,6 +544,9 @@ std::string rockPaperScissors() {
             case 0: //cpu drew rock
                 printf("\nThe CPU drew Rock!\n");
                 printf("\nThe Player Wins!\n");
+
+                playerData.rpsWon++;
+
                 return "Player";
 
             case 1: //cpu also drew paper
@@ -502,6 +556,9 @@ std::string rockPaperScissors() {
             case 2: //cpu drew scissors
                 printf("\nThe CPU drew Scissors!\n");
                 printf("\nThe CPU Wins!\n");
+
+                playerData.rpsLost++;
+
                 return "CPU";
 
             }
@@ -514,11 +571,17 @@ std::string rockPaperScissors() {
             case 0: //cpu drew rock
                 printf("\nThe CPU drew Rock!\n");
                 printf("\nThe CPU Wins!\n");
+
+                playerData.rpsLost++;
+
                 return "CPU";
 
             case 1: //cpu drew paper
                 printf("\nThe CPU drew Paper!\n");
                 printf("\nThe Player Wins!\n");
+
+                playerData.rpsWon++;
+
                 return "Player";
 
             case 2: //cpu also drew scissors
@@ -533,10 +596,186 @@ std::string rockPaperScissors() {
         }
 
         printf("\nIt's a draw. GO AGAIN!\n");
+        playerData.rpsDrawn++;
 
         Sleep(500);
 
     }
+}
+
+
+
+//converts the passed UnoCard into a string format for save file
+std::string formatCardData(const UnoCard cardToSave) {
+
+    std::string formattedCard = "";
+
+    formattedCard.append(std::to_string(cardToSave.colourIndex) + "-");
+    formattedCard.append(std::to_string(cardToSave.number) + "-");
+    formattedCard.append(std::to_string(cardToSave.powerUpIndex));
+   
+    return formattedCard;
+
+}
+
+std::string createSaveData(PlayerSaveData& saveData, const PlayerData& playerData, const std::vector<UnoCard>& playerHand, const std::vector<UnoCard>& cpuHand, const int currentRound, const UnoCard discardCard) {
+
+    std::string formattedText = "";
+
+    //saves player name, current round and hand size
+    formattedText.append(playerData.name + " " + std::to_string(currentRound) + " " + std::to_string(playerHand.size()) + " ");
+
+    //saves all the cards in the player's hand
+    for (UnoCard card : playerHand) {
+
+        formattedText.append(formatCardData(card) + " ");
+
+    }
+
+
+    //saves cpu's hand size
+    formattedText.append(std::to_string(cpuHand.size()) + " ");
+
+    //saves all the cards in the player's hand
+    for (UnoCard card : cpuHand) {
+
+        formattedText.append(formatCardData(card) + " ");
+
+    }
+
+    //saves the current discard card
+    formattedText.append(formatCardData(discardCard) + " ");
+
+    //updates the "largest hand size" stat
+    if (playerHand.size() > saveData.largestHand) {
+        formattedText.append(std::to_string(playerHand.size()) + " ");
+    }
+    else {
+        formattedText.append(std::to_string(saveData.largestHand) + " ");
+    }
+
+    //updates the "most amount of cards drawn" stat
+    if (playerData.cardsDrawn > saveData.totalCardsDrawn) {
+        formattedText.append(std::to_string(playerData.cardsDrawn) + " ");
+    }
+    else {
+        formattedText.append(std::to_string(saveData.totalCardsDrawn) + " ");
+    }
+
+    //updates the Rock, Paper, Scissors minigame stats
+    formattedText.append(std::to_string(saveData.rpsWon + playerData.rpsWon) + " ");
+    formattedText.append(std::to_string(saveData.rpsLost + playerData.rpsLost) + " ");
+    formattedText.append(std::to_string(saveData.rpsDrawn + playerData.rpsDrawn) + " ");
+
+
+    return formattedText;
+    
+}
+
+void updateSaveData(const std::string playerName, const std::string saveData) {
+
+    //creates file path
+	std::string fileName = "SaveData\\";
+	fileName.append(playerName);
+	fileName.append(".txt");
+
+    //opens the existing save file with the intention to overwrite any data within it
+    std::ofstream saveFile = std::ofstream(fileName, std::ios::trunc);
+
+    saveFile << saveData; //overwrites save data
+
+    saveFile.close();
+
+    Sleep(500);
+
+    printf("\n\nYour game data has been saved");
+
+}
+
+//updates player records
+void updateRecords(PlayerRecordData& recordData, const PlayerData& playerData, const PlayerSaveData& saveData, const int totalRounds, const std::string winner, const int continueOldGame) {
+
+
+    //updates longest game stat
+    if (totalRounds > recordData.maxRounds) {
+
+        recordData.maxRounds = totalRounds;
+    }
+
+    //updates largest hand stat
+    if (playerData.handSize > recordData.largestHand) {
+
+        recordData.largestHand = playerData.handSize;
+    }
+
+    //updates no. of cards drawn stat
+    if (playerData.cardsDrawn > recordData.maxCardsDrawn) {
+
+        recordData.maxCardsDrawn = playerData.cardsDrawn;
+    }
+
+    //updates win/lose stat
+    if (winner == "Player") {
+
+        recordData.totalGamesWon++;
+    }
+    else {
+
+        recordData.totalGamesLost++;
+    }
+
+    //updates RPS win/lose/draw stat
+    //checks if game was continued from save to get the total stat
+    if (continueOldGame == 1) {
+
+        recordData.rpsWon = playerData.rpsWon + saveData.rpsWon;
+        recordData.rpsLost = playerData.rpsLost + saveData.rpsLost;
+        recordData.rpsDrawn = playerData.rpsDrawn + saveData.rpsDrawn;
+
+    }
+    else {
+
+        recordData.rpsWon = playerData.rpsWon;
+        recordData.rpsLost = playerData.rpsLost;
+        recordData.rpsDrawn = playerData.rpsDrawn;
+
+    }
+
+}
+
+std::string createRecordData(PlayerRecordData& recordData) {
+
+    std::string formattedText = "";
+
+    //saves player name, current round and hand size
+    formattedText.append(recordData.name + " " + std::to_string(recordData.maxRounds) + " " 
+        + std::to_string(recordData.largestHand) + " " + std::to_string(recordData.maxCardsDrawn) + " "
+        + std::to_string(recordData.totalGamesWon) + " " + std::to_string(recordData.totalGamesLost) + " "
+        + std::to_string(recordData.rpsWon) + " " + std::to_string(recordData.rpsLost) + " "
+        + std::to_string(recordData.rpsDrawn) + " ");
+
+    return formattedText;
+
+}
+
+void saveRecordData(const std::string playerName, const std::string recordData) {
+
+    //creates file path
+    std::string fileName = "RecordData\\";
+    fileName.append(playerName);
+    fileName.append(".txt");
+
+    //opens the existing record file with the intention to overwrite any data within it
+    std::ofstream saveFile = std::ofstream(fileName, std::ios::trunc);
+
+    saveFile << recordData; //overwrites save data
+
+    saveFile.close();
+
+    Sleep(500);
+
+    printf("\n\nYour game records have been updated!");
+
 }
 
 
@@ -565,22 +804,16 @@ std::vector<int>::iterator iterator; //allows for vector iteration
 UnoCard discardCard; //stores the current card to be compared to
 UnoCard startingCard;
 
-Participant* participantCurrentlyPlaying; //points to the Participant currently playing
+bool gameFinished = false; //checks if someone has won
 
 
-//player information setup
-
-//std::string playerName = ""; //stores player name
-//int playerAction = 0; //stores player's chosen action
-int playerCardToDiscard = 0; //stores player's chosen card to discard
-int playerHandSize = 0; //stores the size of the player's hand
+int continueOldGame = 0; //states if the player wants to continue from save data
+std::string dataToWrite = ""; //stores the formatted saveData
 
 
 //cpu information setup
-
-int cpuAction = 0; //stores player's chosen action
-int cpuCardToDiscard = 0; //stores player's chosen card to discard
-int cpuHandSize = 0; //stores the size of the player's hand
+int cpuCardToDiscard = 0; //stores cpu's chosen card to discard
+int cpuHandSize = 0; //stores the size of the cpu's hand
 
 
 Player player;
@@ -588,6 +821,7 @@ CPU cpu;
 
 PlayerData playerData;
 PlayerSaveData playerSaveData;
+PlayerRecordData playerRecordData;
 
 //Participant* currentParticipant = nullptr;
 
@@ -595,3 +829,4 @@ PlayerSaveData playerSaveData;
 
 int totalRounds = 1;
 std::string currentPlayer = "";
+bool gameStarted = false;

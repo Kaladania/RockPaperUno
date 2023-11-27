@@ -9,3 +9,21 @@ coded a function to write and read save data
 	- the dash would make the string easy to split
 	- having the convertion makes the data easier to handle than storing it in a way that can be directly understood by the UnoCard type (or needing to code a function to help the type understand)
 	- reading the data as a string prevents need to overload >> operator to store the data in the UnoCard type
+
+Used the same logic in creating the save file to create a record file
+
+- decided to have new saves be an empty file
+	- allows program to check if the player currently has an active save
+	- used file.peek() to check the next character in a file
+		- -1 is a flag used by ifstream to denote that the reader has reached the end of the file
+		- if peek returns -1 it means that there are no character in the file
+			- thus the file is empty
+
+decided to not have record file update until AFTER the player has won or lost the game associated with the file
+	- acts a barrier to ensure only valid games are added to the data 
+		(e.g if the player chooses the overwrite the game when either party is near the end, the stats don't carry over because the game was not finished)
+	- helps keep the intergrity of the records
+
+added function to display the game rules
+
+added function to overwrite save data using trunc
