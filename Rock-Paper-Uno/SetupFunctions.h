@@ -45,6 +45,30 @@ struct PlayerData { //groups the various main function variables
     int action = 0; //stores player's chosen action
 };
 
+struct PlayerSaveData {
+
+    //stores the current player information to recreate the game
+    std::string name = ""; //stores player name
+    int handCount = 0; //stores the size of the player's hand
+    std::vector<UnoCard> hand = {}; //stores player's hand
+
+    //stores the cpu hand
+    int cpuHandCount = 0; //stores the size of the cpu's hand
+    std::vector<UnoCard> cpuHand = {}; //stores cpu's hand
+
+    //stores the game information
+    UnoCard discardCard; //stores the current discard card
+    int totalRounds = 0;
+
+    //stores info needed for accurate record keeping
+    int largestHand, a = 0; //stores the player's largest hand
+    int totalCardsDrawn = 0; //stores the total amount of cards drawn
+    
+    int rpsWon = 0; //stores how many RPS games won
+    int rpsLost = 0; //stores how many RPS games lost
+    int rpsDrawn = 0; //stores how many RPS games drawn
+};
+
 //overides == to allow for UnoCard struct comparisson
 bool operator== (const UnoCard& lhs, const UnoCard& rhs) {
     return (lhs.colourIndex == rhs.colourIndex
@@ -60,12 +84,12 @@ protected:
 
 public:
 
+    //original attempt to create a hand of 8 unique cards using an array
     /*void generateHand(int(&drawnHand)[8][8]) { //creates a random hand of 8 cards
 
         //int drawnHand[8][8] = {};
 
         for (int i = 0; i < 8; i++) {
-
             for (int j = 0; j < 8; j++) {
 
                 int randomNumber = rand() % 8;
@@ -73,9 +97,7 @@ public:
 
                 drawnHand[i][0] = randomColour;
                 drawnHand[i][1] = randomNumber;
-
             }
-
         }
     }*/
 
@@ -149,7 +171,7 @@ public:
             std::cout << " Power Up ";
         }
 
-        std::cout << "card ";
+        std::cout << " card ";
         colouredText(chosenCard.colourIndex);
         std::cout << " " << chosenCard.number << " was discarded\n";
 
@@ -252,8 +274,7 @@ public:
 
     // original hand setup function that manual creates 8 cards
     // felt code was cumbersome so looked to streamline it
-    //'draws' 8 random cards
-    /*std::vector<UnoCard> handSetup(Player& player) {
+    /*std::vector<UnoCard> handSetup(Player& player) {   //'draws' 8 random cards
 
         player.generateCard(playerCard1.colourIndex, playerCard1.number);
         player.generateCard(playerCard2.colourIndex, playerCard2.number);
@@ -312,7 +333,7 @@ public:
             std::cout << " Power Up ";
         }
 
-        std::cout << "card ";
+        std::cout << " card ";
         colouredText(chosenCard.colourIndex);
         std::cout << " " << chosenCard.number << " was discarded\n";
 
@@ -566,6 +587,7 @@ Player player;
 CPU cpu;
 
 PlayerData playerData;
+PlayerSaveData playerSaveData;
 
 //Participant* currentParticipant = nullptr;
 

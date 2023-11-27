@@ -1,0 +1,12 @@
+Name: []
+
+Longest Game: [] rounds
+Largest hand: [] cards
+Largest number of cards drawn: []
+
+Total Games Won: []
+Total Games Lost: []
+
+Total Rock, Paper, Scissors Games Won: []
+Total Rock, Paper, Scissors Games Lost: []
+Total Rock, Paper, Scissors Games Draw: []

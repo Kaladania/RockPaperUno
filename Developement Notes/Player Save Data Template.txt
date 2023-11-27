@@ -1,0 +1,20 @@
+Name: []
+
+Current Game Length: [] rounds
+Hand count: [] cards
+Cards:
+- []
+- []
+- []
+- []
+- []
+
+Current discard card: []
+
+- - - - - 
+Largest hand: [] cards
+Number of cards drawn: []
+
+Total Rock, Paper, Scissors Games Won: []
+Total Rock, Paper, Scissors Games Lost: []
+Total Rock, Paper, Scissors Games Draw: []

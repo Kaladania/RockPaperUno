@@ -1,0 +1,11 @@
+coded a function to write and read save data
+- created a struct to store all of the needed data to be saved (i.e player hand, the current discard hand) along with data needed to keep accurate records (i.e total number of RPS games won)
+
+- created a check to see if the save data exists
+	- if not, creates a new file and populates it with the player's name
+	- if so, stores all the data in the struct
+
+- decided to store card data as <colour>-<number>-<powerup>
+	- the dash would make the string easy to split
+	- having the convertion makes the data easier to handle than storing it in a way that can be directly understood by the UnoCard type (or needing to code a function to help the type understand)
+	- reading the data as a string prevents need to overload >> operator to store the data in the UnoCard type
