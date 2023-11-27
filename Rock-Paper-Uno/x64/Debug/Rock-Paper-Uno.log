@@ -1,9 +1,9 @@
 ﻿  Rock-Paper-Uno.cpp
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(217,25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(345,65): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(368,16): warning C4477: 'printf' : format string '%i' requires an argument of type 'int', but variadic argument 1 has type 'unsigned __int64'
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(368,16): message : consider using '%zi' in the format string
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(464,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(219,25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(347,65): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(370,16): warning C4477: 'printf' : format string '%i' requires an argument of type 'int', but variadic argument 1 has type 'unsigned __int64'
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(370,16): message : consider using '%zi' in the format string
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\SetupFunctions.h(466,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\IntroFunctions.h(15,3): warning C4129: '/': unrecognized character escape sequence
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\IntroFunctions.h(16,3): warning C4129: '/': unrecognized character escape sequence
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\IntroFunctions.h(17,3): warning C4129: '/': unrecognized character escape sequence
@@ -11,7 +11,8 @@ C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\IntroFunctions.h(
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\IntroFunctions.h(18,3): warning C4129: '_': unrecognized character escape sequence
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\IntroFunctions.h(19,3): warning C4129: '/': unrecognized character escape sequence
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\IntroFunctions.h(70,6): warning C4129: 'A': unrecognized character escape sequence
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\IntroFunctions.h(317,4): warning C4809: switch statement has redundant 'default' label; all possible 'case' labels are given
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\Rock-Paper-Uno.cpp(28,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\UtilityFunctions.h(42): warning C4715: 'isBanned': not all control paths return a value
 C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\UtilityFunctions.h(62): warning C4715: 'indexToColour': not all control paths return a value
+C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\UtilityFunctions.h(42): warning C4715: 'isBanned': not all control paths return a value
   Rock-Paper-Uno.vcxproj -> C:\Users\Nicole\Documents\GitHub\AssessmentGame\Rock-Paper-Uno\x64\Debug\Rock-Paper-Uno.exe

@@ -47,6 +47,8 @@ struct PlayerData { //groups the various main function variables
 
 struct PlayerSaveData { //stores data to recreate the current game at a later date
 
+    bool noSaveDataExists = true; //state if the player currently has an active save
+
     //stores the current player information to recreate the game
     std::string name = ""; //stores player name
     int handCount = 0; //stores the size of the player's hand

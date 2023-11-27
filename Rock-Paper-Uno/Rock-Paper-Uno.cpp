@@ -27,19 +27,15 @@ int main()
 
     srand(time(NULL));
     
-    //beginning game functionality code
 
-    
+
+    //beginning game functionality code
 
     playerData = gameIntro(player, playerData, playerSaveData);
 
-    //playerName = playerData.name;
-    //playerAction = playerData.action;
-    //std::cout << "Hello, " << playerName << "!\n";
     Sleep(500);
 
 
-    Sleep(500);
 
     player.handSetup(player);
     playerHandSize = player.updateHandSize();

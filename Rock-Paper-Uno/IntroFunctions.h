@@ -20,7 +20,7 @@ void printTitle() {
 }
 
 //converts the saveData information into a UnoCard type card
-UnoCard dataToCard(std::string cardData) {
+UnoCard dataToCard(const std::string cardData) {
 
 	std::array<int,3> stringData= {0, 0, 0}; //stores the fetched indexes
 	int iterator = 0; //array iterator
@@ -73,9 +73,20 @@ void showRules() {
 	Sleep(1600);
 }
 
+void deleteSaveData(std::string playerName) {
+
+	try {
+		if (std::filesystem::remove(playerName))
+			std::cout << "file " << playerName << " deleted.\n";
+	}
+	catch (const std::filesystem::filesystem_error& err) {
+		std::cout << "filesystem error: " << err.what() << '\n';
+	}
+}
+
 
 //imports player save data
-void getSaveData(PlayerSaveData& saveData) {
+bool getSaveData(PlayerSaveData& saveData) {
 
 	int optionChosen = 0;
 
@@ -94,8 +105,11 @@ void getSaveData(PlayerSaveData& saveData) {
 		
 		//creates a new save file 
 		std::ofstream newSaveFile = std::ofstream(fileName);
-		newSaveFile << saveData.name;
+		//newSaveFile << saveData.name;
 		newSaveFile.close();
+
+		return false;
+
 	}
 	else {
 
@@ -131,10 +145,12 @@ void getSaveData(PlayerSaveData& saveData) {
 
 	saveFile.close();
 
+	return true;
+
 }
 
 //displays player save data
-void showSaveData(PlayerSaveData& saveData) {
+void showSaveData(const PlayerSaveData& saveData) {
 
 	Sleep(500);
 
@@ -157,6 +173,23 @@ void showSaveData(PlayerSaveData& saveData) {
 	}
 
 	Sleep(500);
+}
+
+bool emptySaveFile(const std::string playerName){
+
+	//creates file path
+	std::string fileName = "SaveData\\";
+	fileName.append(playerName);
+	fileName.append(".txt");
+
+	std::ifstream saveFile = std::ifstream(fileName);
+
+	//checks if the file is empty
+	if (saveFile.peek() == -1) {
+		return true;
+	}
+	
+	return false;
 }
 
 //imports player save data
@@ -201,7 +234,7 @@ void getPlayerRecord(PlayerRecordData& recordData) {
 }
 
 //displays player save data
-void showPlayerRecord(PlayerRecordData& recordData) {
+void showPlayerRecord(const PlayerRecordData& recordData) {
 
 	Sleep(500);
 
@@ -225,6 +258,7 @@ void showPlayerRecord(PlayerRecordData& recordData) {
 	Sleep(500);
 }
 
+
 //shows the game main menu
 PlayerData gameIntro(Player& player, PlayerData& playerData, PlayerSaveData& playerSaveData) {
 
@@ -243,6 +277,8 @@ PlayerData gameIntro(Player& player, PlayerData& playerData, PlayerSaveData& pla
 
 	printTitle(); //displays game title
 
+	playerSaveData.noSaveDataExists = emptySaveFile(playerData.name);
+	
 	getSaveData(playerSaveData);
 
 	getPlayerRecord(playerRecordData);
@@ -265,9 +301,24 @@ PlayerData gameIntro(Player& player, PlayerData& playerData, PlayerSaveData& pla
 
 		case 3: //View Save Data
 
-			showSaveData(playerSaveData);
+			switch (playerSaveData.noSaveDataExists) {
+
+			case true:
+				printf("\nNo save data currently exists for you.");
+
+				break;
+
+			case false:
+				showSaveData(playerSaveData);
+				break;
+
+			default:
+				break;
+			}
+
 			break;
 
+		
 		case 4://View Player Record
 			showPlayerRecord(playerRecordData);
 			break;
