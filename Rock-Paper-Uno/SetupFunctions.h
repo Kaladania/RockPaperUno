@@ -20,6 +20,8 @@
 // COLLECTION/CLASS SETUP //
 
 
+// STRUCTS //
+
 struct UnoCard { //Uno Card Structure
     int number = 0; //stores card number
     int colourIndex = 0; //stores card colour
@@ -39,13 +41,21 @@ struct UnoCard { //Uno Card Structure
 
 };
 
+//overides == to allow for UnoCard struct comparisson
+bool operator== (const UnoCard& lhs, const UnoCard& rhs) {
+    return (lhs.colourIndex == rhs.colourIndex
+        && lhs.number == rhs.number
+        && lhs.powerUpIndex == rhs.powerUpIndex);
+}
+
 struct PlayerData { //groups the various main function variables
-    
+
     std::string name = ""; //stores player name
     int action = 0; //stores player's chosen action
     int handSize = 0; //stores the size of the player's hand
     int cardToDiscard = 0; //stores player's chosen card to discard
     int cardsDrawn = 0; //stores the amount of cards drawn during the game
+    int maxHandSize = 0; //stores the largest hand size reached
 
     int rpsWon = 0; //stores how many RPS games won
     int rpsLost = 0; //stores how many RPS games lost
@@ -72,7 +82,7 @@ struct PlayerSaveData { //stores data to recreate the current game at a later da
     //stores info needed for accurate record keeping
     int largestHand = 0; //stores the player's largest hand
     int totalCardsDrawn = 0; //stores the total amount of cards drawn
-    
+
     int rpsWon = 0; //stores how many RPS games won
     int rpsLost = 0; //stores how many RPS games lost
     int rpsDrawn = 0; //stores how many RPS games drawn
@@ -97,16 +107,8 @@ struct PlayerRecordData { //stores data on the player's history in RPU
     int rpsDrawn = 0; //stores how many RPS games drawn
 };
 
-struct CPUData { //groups the various main function variables
 
-};
-
-//overides == to allow for UnoCard struct comparisson
-bool operator== (const UnoCard& lhs, const UnoCard& rhs) {
-    return (lhs.colourIndex == rhs.colourIndex
-        && lhs.number == rhs.number
-        && lhs.powerUpIndex == rhs.powerUpIndex);
-}
+// CLASSESS //
 
 class Participant { //base class for player and cpu
 
@@ -134,44 +136,21 @@ public:
     }*/
 
     //randomly generates a card
-    void generateCard(int& cardColour, int& cardNumber, int& cardPowerUP, const int filter) {
+    void generateCard(int& cardColour, int& cardNumber, int& cardPowerUP) {
 
         int specialCardProbability = 0; //stores probability of drawing a special card
         
+        //picks random attributes for the card
+        cardColour = rand() % 4;
+        cardNumber = rand() % 8;
 
-        switch (filter) //determines if game generates any type of card, a normal card or a power up
-        {
-        case 0: //generate any card
+        specialCardProbability = rand() % 101;
 
-            specialCardProbability = rand() % 101;
+        if (specialCardProbability > 95) { //5% of drawing a special card
 
-            if (specialCardProbability > 95) { //5% of drawing a special card
-
-                cardPowerUP = 1;
-                
-            }
-            else { //95% chance of drawing a normal card
-
-                cardColour = rand() % 4;
-                cardNumber = rand() % 8;
-            }
-
-        
-        //case 1: //generate a normal card
-        //    cardColour = rand() % 4;
-        //    cardNumber = rand() % 8;
-
-        //    break;
-
-        //case 2: //generate a special card
-        //    cardColour = 1;
-        //    cardNumber = rand() % 8;
-
-        //    break;
-
-        default:
-            break;
+            cardPowerUP = 1;
         }
+
     }
 
     //sets up a new hand of 8 cards
@@ -181,7 +160,7 @@ public:
 
         for (int i = 0; i < 8; i++) {
 
-            activeParticipant.generateCard(newCard.colourIndex, newCard.number, newCard.powerUpIndex, 0);
+            activeParticipant.generateCard(newCard.colourIndex, newCard.number, newCard.powerUpIndex);
             hand.push_back(newCard);
         }
 
@@ -244,7 +223,7 @@ public:
     void drawCard() {
 
         UnoCard drawnCard; //card that has been drawn
-        generateCard(drawnCard.colourIndex, drawnCard.number, drawnCard.powerUpIndex, 0);
+        generateCard(drawnCard.colourIndex, drawnCard.number, drawnCard.powerUpIndex);
 
         hand.push_back(drawnCard); //adds a new card to the Participant's hand
         std::cout << "\nThe card ";
@@ -465,6 +444,9 @@ public:
     //    return hand;*/
     //}
 };
+
+
+// FUNCTIONS //
 
 
 // finds if element in vector (card in Participant hand)
@@ -703,9 +685,9 @@ void updateRecords(PlayerRecordData& recordData, const PlayerData& playerData, c
     }
 
     //updates largest hand stat
-    if (playerData.handSize > recordData.largestHand) {
+    if (playerData.maxHandSize > recordData.largestHand) {
 
-        recordData.largestHand = playerData.handSize;
+        recordData.largestHand = playerData.maxHandSize;
     }
 
     //updates no. of cards drawn stat

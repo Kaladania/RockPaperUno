@@ -89,7 +89,7 @@ int main()
             cpuHandSize = cpu.updateHandSize();
 
             //generates a new card to assign as the 'discard card'
-            cpu.generateCard(startingCard.colourIndex, startingCard.number, startingCard.powerUpIndex, 0);
+            cpu.generateCard(startingCard.colourIndex, startingCard.number, startingCard.powerUpIndex);
             discardCard = startingCard;
 
             break;
@@ -183,6 +183,8 @@ int main()
                 playerData.handSize = player.updateHandSize();
 
                 playerData.cardsDrawn++;
+
+                
                 break;
 
             case exitGame: //exit game
@@ -261,13 +263,21 @@ int main()
         Sleep(900);
 
         //updates tracker variables
+        // 
+        //tracks max hand size during game
+        if (playerData.handSize > playerData.maxHandSize) {
+
+            playerData.maxHandSize = playerData.handSize;
+
+        }
         totalRounds++;
     }
 
-    //only create save data if the player had started playing the game
-    if (gameStarted) {
+    printf("\n\n- - - -  GAME ENDED - - - ");
 
-        printf("\n\n- - - -  GAME ENDED - - - ");
+    //only create save data if the player had started playing the game
+    //if the game has started but didn't finish
+    if (gameStarted && !gameFinished) {
 
         printf("\nDo you want to save your game so that you can continue playing later?"
             "\n\nWARNING: Doing so means that your old save data will be OVERWRITTEN!");

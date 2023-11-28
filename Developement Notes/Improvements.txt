@@ -7,3 +7,13 @@ Improvements:
 restructure the code in a way that doesn't require the player class to be imported JUST to use
 
 now that files are being communicated with, add further checks to the player username to ensure that it doesn't inlcude characters illegal in file names (such as * " / \ < > : | ?)
+
+moreover want to add a function that deletes save data after that specific game has been one 
+	- prevents players from milking the same game to boost their records
+
+
+
+overall fun game.
+have some regrets incorporating rock paper scissors since it extends the gameplay quite a bit
+the humor of potentially going 5 or so rounds without a turn turns to annoyance when its revealed the cpu has an uno and you've still got 6 cards left
+that being said, the reliance on luck made the final moments of the game more tense as i hoped to win the minigame during round 19 as both myself and the cpu had only one card remaining (i lost)
